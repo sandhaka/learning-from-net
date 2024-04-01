@@ -1,0 +1,15 @@
+That's a debug line for traced with parameter: 1
+Fail: parameter is >= 1 
+That's a trace line for traced with parameter: 1
+Fail: parameter is >= 1
+That's a debug line for traced with parameter: 2
+Fail: parameter is >= 1 
+That's a trace line for traced with parameter: 2
+Fail: parameter is >= 1
+That's a debug line for traced with parameter: 0
+That's a trace line for traced with parameter: 0
+That's a trace line for traced with parameter: 1
+Fail: parameter is >= 1
+That's a trace line for traced with parameter: 2
+Fail: parameter is >= 1
+That's a trace line for traced with parameter: 0
