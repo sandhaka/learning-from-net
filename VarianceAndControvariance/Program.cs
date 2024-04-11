@@ -15,6 +15,7 @@ var z = new Derived();
 z.DoSomething();
 z.DoSomethingMore();
 
+
 // This is how the object substitution principle works on regular types.
 // These four possibilities exists when we are using a reference to the
 // base type and a reference to a derived type.
@@ -29,7 +30,7 @@ z.DoSomethingMore();
 
 // The out keyword indicate the covariant type T. The interface produce
 // an object of type T.
-// The int keyword indicate the the contravariant type T. The interface
+// The int keyword indicate the contravariant type T. The interface
 // accept the object parameter of type T.
 
 IProducer<Base> prodOfBase = null!;
@@ -95,7 +96,3 @@ file interface IConsumer<in T>
 {
     void Consume(T obj);
 }
-
-// Exercise:
-// Create an example of real world usage of variant and contravariant interfaces
-
