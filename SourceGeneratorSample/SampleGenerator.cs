@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace SourceGeneratorSample
 {
+    [Generator]
     public class SampleGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
