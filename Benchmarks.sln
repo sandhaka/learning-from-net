@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneratorTarget", "So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneratorSample", "SourceGeneratorSample\SourceGeneratorSample.csproj", "{B82D9CA6-DAA6-4AC2-91D7-1526AF2A377E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingSourceGenerator", "EventSourcingSourceGenerator\EventSourcingSourceGenerator.csproj", "{D0C0C83D-8410-4F09-9B3C-7DF1D6BF50F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingSourceGeneratorTarget", "EventSourcingSourceGeneratorTarget\EventSourcingSourceGeneratorTarget.csproj", "{763CFF24-CDDE-49A7-BA47-18E15D317890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{B82D9CA6-DAA6-4AC2-91D7-1526AF2A377E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B82D9CA6-DAA6-4AC2-91D7-1526AF2A377E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B82D9CA6-DAA6-4AC2-91D7-1526AF2A377E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C0C83D-8410-4F09-9B3C-7DF1D6BF50F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C0C83D-8410-4F09-9B3C-7DF1D6BF50F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C0C83D-8410-4F09-9B3C-7DF1D6BF50F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C0C83D-8410-4F09-9B3C-7DF1D6BF50F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

@@ -6,18 +6,22 @@ Learn from .NET
 
 #### Benchmarks
 
-- [Collections](FrozenCollectionsBmk) 
-- [Execution on Stack](StackExecutingBmk)
-- [Allocations](StackAlloc)
+- [x] [Collections](FrozenCollectionsBmk) 
+- [x] [Execution on Stack](StackExecutingBmk)
+- [x] [Allocations](StackAlloc)
 
 #### OOP
 
-- [Liskov Principle](lsp)
-- [VarianceAndContravariance](VarianceAndControvariance)
+- [x] [Liskov Principle](lsp)
+- [x] [Variance And Contravariance](VarianceAndControvariance)
+
+#### Source Generators
+
+- [x] [Source Generators Base Sample](SourceGeneratorSample)
+- [ ] Source Generators applied on event sourcing
 
 #### Miscellaneous
 
-- [Trace test](TraceTesting)
-
+- [x] [Trace test](TraceTesting)
 
 </samp>
