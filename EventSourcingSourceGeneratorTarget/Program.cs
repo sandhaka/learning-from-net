@@ -1,14 +1,14 @@
 ﻿using EventSourcingSourceGeneratorTarget.Infrastructure;
 using EventSourcingSourceGeneratorTarget.Models;
 
-var harbourMasterOffice = new HarbourMaster(new EventsStore());
+var firstHarbourMoInstance = new HarbourMaster(new HarbourMasterStore());
 
 #region  [Sample setup]
-var stMaria = harbourMasterOffice.RegisterShip("St.Maria", 8000.00f);
-var mayFlower = harbourMasterOffice.RegisterShip("MayFlower", 3000.00f);
-var africanQueen = harbourMasterOffice.RegisterShip("AfricanQueen", 17000.00f);
-var belfastHarbour = harbourMasterOffice.RegisterPort("BelfastHarbour");
-var alabamaPort = harbourMasterOffice.RegisterPort("AlabamaPort");
+var stMaria = await firstHarbourMoInstance.RegisterShipAsync("St.Maria", 8000.00f);
+var mayFlower = await firstHarbourMoInstance.RegisterShipAsync("MayFlower", 3000.00f);
+var africanQueen = await firstHarbourMoInstance.RegisterShipAsync("AfricanQueen", 17000.00f);
+var belfastHarbour = await firstHarbourMoInstance.RegisterPortAsync("BelfastHarbour");
+var alabamaPort = await firstHarbourMoInstance.RegisterPortAsync("AlabamaPort");
 if (new[] { stMaria, mayFlower, africanQueen }.Any(registered => registered.IsNone()))
 {
     Console.WriteLine("[ERR]: Ship registration failed");
@@ -28,31 +28,34 @@ var alabamaPortId = alabamaPort.Reduce();
  * master office.
  */
 
-harbourMasterOffice.Sail(belfastHarbourPortId, stMariaShipId);
-harbourMasterOffice.Sail(belfastHarbourPortId, mayFlowerId);
+await firstHarbourMoInstance.SailAsync(belfastHarbourPortId, stMariaShipId);
+await firstHarbourMoInstance.SailAsync(belfastHarbourPortId, mayFlowerId);
 Thread.Sleep(100);
-harbourMasterOffice.Dock(alabamaPortId, stMariaShipId);
+await firstHarbourMoInstance.DockAsync(alabamaPortId, stMariaShipId);
 // ... Various navigation activities
 Thread.Sleep(300);
-harbourMasterOffice.Sail(alabamaPortId, stMariaShipId);
+await firstHarbourMoInstance.SailAsync(alabamaPortId, stMariaShipId);
 Thread.Sleep(200);
-harbourMasterOffice.Dock(belfastHarbourPortId, stMariaShipId);
-harbourMasterOffice.Dock(alabamaPortId, mayFlowerId);
+await firstHarbourMoInstance.DockAsync(belfastHarbourPortId, stMariaShipId);
+await firstHarbourMoInstance.DockAsync(alabamaPortId, mayFlowerId);
 
 // Locate a ship:
-harbourMasterOffice.Locate(stMariaShipId);
+await firstHarbourMoInstance.LocateAsync(stMariaShipId);
 
 // Saving current state to a persistence layer
-harbourMasterOffice.Save();
+await firstHarbourMoInstance.SaveCurrentStateAsync();
 // ...
+
+var anotherHarbourMoInstance = new HarbourMaster(new HarbourMasterStore());
+
 // Reload from saved data
-harbourMasterOffice.Load();
+await anotherHarbourMoInstance.HydrateAsync();
 
 // Locate a ship:
-harbourMasterOffice.Locate(stMariaShipId);
+await anotherHarbourMoInstance.LocateAsync(stMariaShipId);
 
-harbourMasterOffice.Locate(mayFlowerId);
-harbourMasterOffice.Locate(africanQueenId);
+await anotherHarbourMoInstance.LocateAsync(mayFlowerId);
+await anotherHarbourMoInstance.LocateAsync(africanQueenId);
 
 
 return 0;

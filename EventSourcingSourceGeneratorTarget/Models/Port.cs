@@ -1,16 +1,29 @@
-using System.Runtime.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
 
-internal sealed class Port
+public sealed class Port
 {
-    [IgnoreDataMember]
     private readonly JsonSerializerOptions _jsonSerializerOptions =
         new JsonSerializerOptions { WriteIndented = true };
     
     public required Guid Id { get; init; }
     public required string Name { get; init; }
+
+    [SetsRequiredMembers]
+    public Port(string name)
+    {
+        Id = Guid.Empty;
+        Name = name;
+    }
+
+    [SetsRequiredMembers]
+    public Port(Guid id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
     
     public override bool Equals(object? obj)
     {

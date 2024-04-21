@@ -1,9 +1,9 @@
 namespace EventSourcingSourceGeneratorTarget.Models;
 
-internal abstract class PortEvent : IEvent
+public class PortEvent : IEvent
 {
-    public Guid Id { get; } = Guid.NewGuid();
-    public DateTime UtcDateTime { get; } = DateTime.UtcNow;
+    public required Guid Id { get; init; }
+    public required DateTime UtcDateTime { get; init; }
     public required Guid ShipId { get; init; }
     public required Guid PortId { get; init; }
 }

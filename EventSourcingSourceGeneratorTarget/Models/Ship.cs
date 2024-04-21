@@ -1,36 +1,51 @@
-using System.Runtime.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using EventSourcingSourceGeneratorTarget.Option;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
 
-internal enum ShipState
+public enum ShipState
 {
     UnSet, Docked, Navigating
 }
 
-internal sealed class Ship
+public sealed class Ship
 {
-    [IgnoreDataMember]
     private readonly JsonSerializerOptions _jsonSerializerOptions =
         new JsonSerializerOptions { WriteIndented = true };
-    
+
     public required Guid Id { get; init; }
     public required string Name { get; init; }
     public required float WeightCapacity { get; init; }
     public ShipState State { get; private set; } = ShipState.UnSet;
-    public Option<Guid> PortId { get; private set; } = new None<Guid>();
+    public Option<Guid> DockedPortId { get; private set; } = new None<Guid>();
+
+    [SetsRequiredMembers]
+    public Ship(string name, float weightCapacity)
+    {
+        Id = Guid.Empty;
+        Name = name;
+        WeightCapacity = weightCapacity;
+    }
+    
+    [SetsRequiredMembers]
+    public Ship(Guid id, string name, float weightCapacity)
+    {
+        Id = id;
+        Name = name;
+        WeightCapacity = weightCapacity;
+    }
 
     public void Sail()
     {
         State = ShipState.Navigating;
-        PortId = new None<Guid>();
+        DockedPortId = new None<Guid>();
     }
 
     public void Dock(Guid portId)
     {
         State = ShipState.Docked;
-        PortId = portId;
+        DockedPortId = portId;
     }
 
     public override bool Equals(object? obj)

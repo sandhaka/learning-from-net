@@ -1,50 +1,48 @@
-using System.Runtime.Serialization;
 using System.Text.Json;
 using EventSourcingSourceGeneratorTarget.Infrastructure;
 using EventSourcingSourceGeneratorTarget.Option;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
 
-internal sealed partial class HarbourMaster(IEventsStore store) : IAggregateRoot
+internal sealed partial class HarbourMaster : IAggregateRoot
 {
-    [IgnoreDataMember]
     private readonly JsonSerializerOptions _jsonSerializerOptions =
         new JsonSerializerOptions { WriteIndented = true };
-    
-    private readonly IEventsStore _store = store;
-    
-    // Current state of ports and ships entities
-    private readonly HashSet<Port> _ports = [];
-    private readonly HashSet<Ship> _ships = [];
-    // History
-    private readonly IList<PortEvent> _portEvents = [];
 
-    public IOption<Guid> RegisterShip(string shipName, float weightCapacity)
+    private readonly IEventsStore _store;
+
+    private readonly IList<PortEvent> _events = [];
+    private readonly HashSet<Ship> _ships = [];
+    private readonly HashSet<Port> _ports = [];
+
+    public HarbourMaster(IEventsStore store)
     {
-        var ship = new Ship
-        {
-            Name = shipName ?? throw new ArgumentNullException(nameof(shipName)),
-            WeightCapacity = weightCapacity,
-            Id = Guid.NewGuid()
-        };
+        _store = store;
+    }
+
+    public async Task<IOption<Guid>> RegisterShipAsync(string shipName, float weightCapacity)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(shipName);
         
-        if (_ships.Add(ship))
-            return new Some<Guid>(ship.Id);
+        var ship = new Ship(shipName, weightCapacity);
+
+        var shipStored = await _store.AddShipAsync(ship);
+        if (!shipStored.IsNone()) 
+            return new Some<Guid>(shipStored.Reduce());
         
         Console.WriteLine($"[WARN]: {ship} not added. Ship {shipName} is just present");
         return new None<Guid>();
     }
 
-    public IOption<Guid> RegisterPort(string portName)
+    public async Task<IOption<Guid>> RegisterPortAsync(string portName)
     {
-        var port = new Port
-        {
-            Name = portName ?? throw new ArgumentNullException(nameof(portName)),
-            Id = Guid.NewGuid()
-        };
+        ArgumentException.ThrowIfNullOrEmpty(portName);
         
-        if (_ports.Add(port))
-            return new Some<Guid>(port.Id);
+        var port = new Port(portName);
+
+        var portStored = await _store.AddPortAsync(port);
+        if (!portStored.IsNone()) 
+            return new Some<Guid>(portStored.Reduce());
         
         Console.WriteLine($"[WARN] Harbour Master: {port} not added. Port {portName} is just present");
         return new None<Guid>();
@@ -56,10 +54,10 @@ internal sealed partial class HarbourMaster(IEventsStore store) : IAggregateRoot
     /// </summary>
     /// <param name="portId">Destination port id</param>
     /// <param name="shipId">Ship id</param>
-    public void Sail(Guid portId, Guid shipId)
+    public async ValueTask SailAsync(Guid portId, Guid shipId)
     {
-        var @event = new ShipHasSailed(shipId, portId);
-        Apply(@event);
+        var @event = new ShipHasSailed(DateTime.UtcNow, shipId, portId);
+        await ApplyAsync(@event);
     }
 
     /// <summary>
@@ -67,19 +65,19 @@ internal sealed partial class HarbourMaster(IEventsStore store) : IAggregateRoot
     /// </summary>
     /// <param name="portId">Arrival port id</param>
     /// <param name="shipId">Ship id</param>
-    public void Dock(Guid portId, Guid shipId)
+    public async ValueTask DockAsync(Guid portId, Guid shipId)
     {
-        var @event = new ShipHasDocked(shipId, portId);
-        Apply(@event);
+        var @event = new ShipHasDocked(DateTime.UtcNow, shipId, portId);
+        await ApplyAsync(@event);
     }
     
     /// <summary>
     /// Locate a ship
     /// </summary>
     /// <param name="shipId">Ship id</param>
-    public async void Locate(Guid shipId)
+    public async Task LocateAsync(Guid shipId)
     {
-        Ship ship = await GetShipAsync(shipId);
+        var ship = await GetShipAsync(shipId);
         
         var serialized = JsonSerializer.Serialize(new
         {
@@ -90,7 +88,23 @@ internal sealed partial class HarbourMaster(IEventsStore store) : IAggregateRoot
         Console.WriteLine(serialized);
     }
 
-    private async void Apply(PortEvent @event)
+    /// <summary>
+    /// Save current state to database
+    /// </summary>
+    public async Task SaveCurrentStateAsync()
+    {
+        
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public async Task HydrateAsync()
+    {
+        
+    }
+
+    private async ValueTask ApplyAsync(PortEvent @event)
     {
         var ship = await GetShipAsync(@event.ShipId);
         var port = await GetPortAsync(@event.PortId);
@@ -106,31 +120,35 @@ internal sealed partial class HarbourMaster(IEventsStore store) : IAggregateRoot
                 Console.WriteLine($"[INFO] Harbour Master: ship {ship.Name} has docked in {port.Name} port");
                 break;
         }
-
-        _portEvents.Add(@event);
-    }
-
-    // TODO Auto-Build
-    public void Save()
-    {
         
+        _events.Add(@event);
     }
-
-    // TODO Auto-Build
-    public void Load()
+    
+    private async ValueTask<Ship> GetShipAsync(Guid id)
     {
+        var s = _ships.SingleOrDefault(x => x.Id == id);
+        if (s is not null)
+            return s;
         
-    }
+        var ship = await _store.GetShipAsync(id);
+        if (ship.IsNone()) throw new ApplicationException($"Ship with id {id} not found");
+        s = ship.Reduce();
+        _ships.Add(s);
 
-    // TODO Auto-Build
-    private async Task<Ship> GetShipAsync(Guid id)
-    {
-        throw new NotImplementedException();
+        return s;
     }
-
-    // TODO Auto-Build
-    private async Task<Port> GetPortAsync(Guid id)
+    
+    private async ValueTask<Port> GetPortAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var p = _ports.SingleOrDefault(x => x.Id == id);
+        if (p is not null) 
+            return p;
+        
+        var port = await _store.GetPortAsync(id);
+        if (port.IsNone()) throw new ApplicationException($"Port with id {id} not found");
+        p = port.Reduce();
+        _ports.Add(p);
+
+        return p;
     }
 }

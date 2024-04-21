@@ -5,8 +5,9 @@ namespace EventSourcingSourceGeneratorTarget.Models;
 internal sealed class ShipHasDocked : PortEvent
 {
     [SetsRequiredMembers]
-    public ShipHasDocked(Guid shipId, Guid portId)
+    public ShipHasDocked(DateTime utcDateTime, Guid shipId, Guid portId)
     {
+        UtcDateTime = utcDateTime;
         ShipId = shipId;
         PortId = portId;
     }
