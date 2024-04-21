@@ -1,0 +1,3 @@
+namespace EventSourcingSourceGeneratorTarget.Models;
+
+public interface IAggregateRoot;
