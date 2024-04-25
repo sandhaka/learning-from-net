@@ -18,7 +18,7 @@ public sealed class Ship
     public required string Name { get; init; }
     public required float WeightCapacity { get; init; }
     public ShipState State { get; private set; } = ShipState.UnSet;
-    public Option<Guid> DockedPortId { get; private set; } = new None<Guid>();
+    public Guid DockedPortId { get; private set; } = Guid.Empty;
 
     [SetsRequiredMembers]
     public Ship(string name, float weightCapacity)
@@ -39,7 +39,7 @@ public sealed class Ship
     public void Sail()
     {
         State = ShipState.Navigating;
-        DockedPortId = new None<Guid>();
+        DockedPortId = Guid.Empty;
     }
 
     public void Dock(Guid portId)

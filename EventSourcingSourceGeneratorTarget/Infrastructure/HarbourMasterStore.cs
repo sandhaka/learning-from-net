@@ -6,10 +6,12 @@ namespace EventSourcingSourceGeneratorTarget.Infrastructure;
 // TODO Auto-Generated
 internal partial interface IEventsStore
 {
+    public Task<IEnumerable<PortEventData>> GetPortEventsAsync();
     public Task<Option<ShipEntity>> GetShipAsync(Guid shipId);
     public Task<Option<PortEntity>> GetPortAsync(Guid portId);
-    public Task<Option<Guid>> AddShipAsync(ShipEntity entity);
-    public Task<Option<Guid>> AddPortAsync(PortEntity entity);
+    public Task<(bool Added, Guid Id)> AddShipAsync(ShipEntity entity);
+    public Task<(bool Added, Guid Id)> AddPortAsync(PortEntity entity);
+    public Task SaveAsync(IReadOnlyList<PortEventData> events);
 }
 
 // TODO Auto-Generated
@@ -26,15 +28,23 @@ internal sealed partial class HarbourMasterStore : IEventsStore
         _database = client.GetDatabase("es_source");
     }
 
+    public async Task<IEnumerable<PortEventData>> GetPortEventsAsync()
+    {
+        var asyncCursor = await PortEventCollection().FindAsync(Builders<PortEventData>.Filter.Empty);
+        return asyncCursor.ToEnumerable();
+    }
+
     public async Task<Option<ShipEntity>> GetShipAsync(Guid shipId)
     {
-        var shipSearchFilter = Builders<ShipEntity>.Filter.Eq(x => x.Id, shipId);
-        var shipSearch = await ShipCollection().FindAsync(shipSearchFilter);
+        var filterDefinition = Builders<ShipEntity>.Filter.Eq(x => x.Id, shipId);
+        var asyncCursor = await ShipCollection().FindAsync(filterDefinition);
 
-        if (!await shipSearch.AnyAsync())
+        var found = await asyncCursor.ToListAsync();
+        
+        if (found.Count == 0)
             return new None<ShipEntity>();
-
-        var entity = await shipSearch.SingleAsync();
+            
+        var entity = found.Single();
         
         return new Some<ShipEntity>(entity);
     }
@@ -42,47 +52,70 @@ internal sealed partial class HarbourMasterStore : IEventsStore
     public async Task<Option<PortEntity>> GetPortAsync(Guid portId)
     {
         var portSearchFilter = Builders<PortEntity>.Filter.Eq(x => x.Id, portId);
-        var portSearch = await PortCollection().FindAsync(portSearchFilter);
+        var asyncCursor = await PortCollection().FindAsync(portSearchFilter);
 
-        if (!await portSearch.AnyAsync())
+        var found = await asyncCursor.ToListAsync();
+
+        if (found.Count == 0)
             return new None<PortEntity>();
 
-        var entity = await portSearch.SingleAsync();
+        var entity = found.Single();
         
         return new Some<PortEntity>(entity);
     }
 
-    public async Task<Option<Guid>> AddShipAsync(ShipEntity entity)
+    public async Task<(bool Added, Guid Id)> AddShipAsync(ShipEntity entity)
     {
-        var shipSearchFilter = Builders<ShipEntity>.Filter.Eq(x => x.Name, entity.Name);
+        var filterDefinition = Builders<ShipEntity>.Filter.Eq(x => x.Name, entity.Name);
         
-        var shipSearch = await ShipCollection().FindAsync(shipSearchFilter);
+        var asyncCursor = await ShipCollection().FindAsync(filterDefinition);
 
-        if (await shipSearch.AnyAsync())
-            return new None<Guid>();
+        var found = await asyncCursor.ToListAsync();
+        
+        if (found.Count != 0)
+        {
+            var ship = found.Single();
+            return (Added: false, ship.Id);
+        }
 
         await ShipCollection().InsertOneAsync(entity);
 
-        return entity.Id;
+        return (Added: true, entity.Id);
     }
     
-    public async Task<Option<Guid>> AddPortAsync(PortEntity entity)
+    public async Task<(bool Added, Guid Id)> AddPortAsync(PortEntity entity)
     {
-        var portSearchFilter = Builders<PortEntity>.Filter.Eq(x => x.Name, entity.Name);
+        var filterDefinition = Builders<PortEntity>.Filter.Eq(x => x.Name, entity.Name);
         
-        var portSearch = await PortCollection().FindAsync(portSearchFilter);
+        var asyncCursor = await PortCollection().FindAsync(filterDefinition);
 
-        if (await portSearch.AnyAsync())
-            return new None<Guid>();
+        var found = await asyncCursor.ToListAsync();
+        
+        if (found.Count != 0)
+        {
+            var port = found.Single();
+            return (Added: false, port.Id);
+        }
 
         await PortCollection().InsertOneAsync(entity);
 
-        return entity.Id;
+        return (Added: true, entity.Id);
     }
 
     public async Task SaveAsync(IReadOnlyList<PortEventData> events)
     {
+        var sortDefinition = Builders<PortEventData>.Sort.Descending(x => x.UtcDateTime);
+        var filterDefinition = Builders<PortEventData>.Filter.Empty;
+
+        var lastEvent = await PortEventCollection()
+            .Find(filterDefinition)
+            .Sort(sortDefinition)
+            .Limit(1)
+            .FirstOrDefaultAsync();
         
+        var evts = events.Where(x => x.UtcDateTime > (lastEvent?.UtcDateTime ?? DateTime.MinValue));
+
+        await PortEventCollection().InsertManyAsync(evts);
     }
 
     private IMongoCollection<PortEventData> PortEventCollection() =>

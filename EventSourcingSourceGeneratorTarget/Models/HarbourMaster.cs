@@ -20,32 +20,32 @@ internal sealed partial class HarbourMaster : IAggregateRoot
         _store = store;
     }
 
-    public async Task<IOption<Guid>> RegisterShipAsync(string shipName, float weightCapacity)
+    public async Task<Guid> RegisterShipAsync(string shipName, float weightCapacity)
     {
         ArgumentException.ThrowIfNullOrEmpty(shipName);
         
         var ship = new Ship(shipName, weightCapacity);
 
         var shipStored = await _store.AddShipAsync(ship);
-        if (!shipStored.IsNone()) 
-            return new Some<Guid>(shipStored.Reduce());
         
-        Console.WriteLine($"[WARN]: {ship} not added. Ship {shipName} is just present");
-        return new None<Guid>();
+        if (!shipStored.Added)
+            Console.WriteLine($"[WARN] Harbour Master: Ship not added. Ship {shipName} is just present");
+        
+        return shipStored.Id;
     }
 
-    public async Task<IOption<Guid>> RegisterPortAsync(string portName)
+    public async Task<Guid> RegisterPortAsync(string portName)
     {
         ArgumentException.ThrowIfNullOrEmpty(portName);
         
         var port = new Port(portName);
 
         var portStored = await _store.AddPortAsync(port);
-        if (!portStored.IsNone()) 
-            return new Some<Guid>(portStored.Reduce());
         
-        Console.WriteLine($"[WARN] Harbour Master: {port} not added. Port {portName} is just present");
-        return new None<Guid>();
+        if (!portStored.Added)
+            Console.WriteLine($"[WARN] Harbour Master: Port not added. Port {portName} is just present");
+        
+        return portStored.Id;
     }
     
     /// <summary>
@@ -93,15 +93,30 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// </summary>
     public async Task SaveCurrentStateAsync()
     {
+        var eventsToStore = _events
+            .Select(e => (PortEventData) e)
+            .ToList()
+            .AsReadOnly();
         
+        await _store.SaveAsync(eventsToStore);
     }
     
     /// <summary>
-    /// 
+    /// Restore previous state from the database
     /// </summary>
     public async Task HydrateAsync()
     {
-        
+        if (_events.Any())
+            throw new ApplicationException($"Object {GetType().Name} is initialized. Create a new instance and retry.");
+            
+        var events = await _store.GetPortEventsAsync();
+
+        foreach (var @event in events)
+        {
+            var eventDomainObject = (PortEvent) @event;
+            await ApplyAsync(eventDomainObject);
+            _events.Add(eventDomainObject);
+        }
     }
 
     private async ValueTask ApplyAsync(PortEvent @event)

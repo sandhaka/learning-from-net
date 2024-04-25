@@ -4,21 +4,11 @@ using EventSourcingSourceGeneratorTarget.Models;
 var firstHarbourMoInstance = new HarbourMaster(new HarbourMasterStore());
 
 #region  [Sample setup]
-var stMaria = await firstHarbourMoInstance.RegisterShipAsync("St.Maria", 8000.00f);
-var mayFlower = await firstHarbourMoInstance.RegisterShipAsync("MayFlower", 3000.00f);
-var africanQueen = await firstHarbourMoInstance.RegisterShipAsync("AfricanQueen", 17000.00f);
-var belfastHarbour = await firstHarbourMoInstance.RegisterPortAsync("BelfastHarbour");
-var alabamaPort = await firstHarbourMoInstance.RegisterPortAsync("AlabamaPort");
-if (new[] { stMaria, mayFlower, africanQueen }.Any(registered => registered.IsNone()))
-{
-    Console.WriteLine("[ERR]: Ship registration failed");
-    return -1;
-}
-var stMariaShipId = stMaria.Reduce();
-var mayFlowerId = mayFlower.Reduce();
-var belfastHarbourPortId = belfastHarbour.Reduce();
-var africanQueenId = africanQueen.Reduce();
-var alabamaPortId = alabamaPort.Reduce();
+var stMariaShipId = await firstHarbourMoInstance.RegisterShipAsync("St.Maria", 8000.00f);
+var mayFlowerId = await firstHarbourMoInstance.RegisterShipAsync("MayFlower", 3000.00f);
+var africanQueenId = await firstHarbourMoInstance.RegisterShipAsync("AfricanQueen", 17000.00f);
+var belfastHarbourPortId = await firstHarbourMoInstance.RegisterPortAsync("BelfastHarbour");
+var alabamaPortId = await firstHarbourMoInstance.RegisterPortAsync("AlabamaPort");
 #endregion
 
 #region [Scenario]
