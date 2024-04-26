@@ -1,9 +1,12 @@
 using System.Text.Json;
 using EventSourcingSourceGeneratorTarget.Infrastructure;
-using EventSourcingSourceGeneratorTarget.Option;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
 
+/// <summary>
+/// Simplified example model of a harbour master office, it holds the ships fleet and a ports collection.
+/// With Dock() and Sail() methods track navigation activities.
+/// </summary>
 internal sealed partial class HarbourMaster : IAggregateRoot
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions =
@@ -20,6 +23,12 @@ internal sealed partial class HarbourMaster : IAggregateRoot
         _store = store;
     }
 
+    /// <summary>
+    /// Register a new ship
+    /// </summary>
+    /// <param name="shipName">Ship unique name</param>
+    /// <param name="weightCapacity">Cargo Capacity in Kg</param>
+    /// <returns>Unique identifier of the ship entity</returns>
     public async Task<Guid> RegisterShipAsync(string shipName, float weightCapacity)
     {
         ArgumentException.ThrowIfNullOrEmpty(shipName);
@@ -34,6 +43,11 @@ internal sealed partial class HarbourMaster : IAggregateRoot
         return shipStored.Id;
     }
 
+    /// <summary>
+    /// Register a new port
+    /// </summary>
+    /// <param name="portName">Port unique name</param>
+    /// <returns>Unique identifier of the port entity</returns>
     public async Task<Guid> RegisterPortAsync(string portName)
     {
         ArgumentException.ThrowIfNullOrEmpty(portName);
@@ -56,6 +70,9 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async ValueTask SailAsync(Guid portId, Guid shipId)
     {
+        ArgumentNullException.ThrowIfNull(portId, nameof(portId));
+        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
+        
         var @event = new ShipHasSailed(DateTime.UtcNow, shipId, portId);
         await ApplyAsync(@event);
     }
@@ -67,6 +84,9 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async ValueTask DockAsync(Guid portId, Guid shipId)
     {
+        ArgumentNullException.ThrowIfNull(portId, nameof(portId));
+        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
+        
         var @event = new ShipHasDocked(DateTime.UtcNow, shipId, portId);
         await ApplyAsync(@event);
     }
@@ -77,6 +97,8 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async Task LocateAsync(Guid shipId)
     {
+        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
+        
         var ship = await GetShipAsync(shipId);
         
         var serialized = JsonSerializer.Serialize(new
