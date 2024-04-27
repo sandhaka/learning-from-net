@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using EventSourcingSourceGenerator.Attributes;
 using EventSourcingSourceGenerator.Option;
@@ -22,6 +24,8 @@ public class EventsStoreGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
+        /* Return as soon as possible to avoid resources wasting */
+        
         if (context.SyntaxReceiver is not AttributeSyntaxReceiver<EventsStoreGeneratorTargetAttribute> syntaxReceiver)
             return;
 
@@ -42,6 +46,15 @@ public class EventsStoreGenerator : ISourceGenerator
         var eventType = searchResult.Reduce();
         
         Console.WriteLine($"Found a target type name for event store: {eventType.Name}");
+        
+        var derivedTypes = EnumerateDerivedTypes(context.Compilation, eventType);
+
+        foreach (var derivedType in derivedTypes)
+        {
+            Console.WriteLine($"With derived type: {derivedType.Name}");
+        }
+        
+        
 
         // // Finding attribute over class
         // var attribute = classSyntax.AttributeLists
@@ -55,8 +68,6 @@ public class EventsStoreGenerator : ISourceGenerator
         //
         // using var reader = new StreamReader(stream);
         // var templateContent = reader.ReadToEnd();
-
-
     }
 
     private Option<ITypeSymbol> SearchEventTypeInTargetClass(SemanticModel model, TypeDeclarationSyntax classDeclarationSyntax)
@@ -106,5 +117,47 @@ public class EventsStoreGenerator : ISourceGenerator
 
         return namedTypeSymbol.Name == "IEnumerable" ||
                implementedInterfaces.Contains("IEnumerable");
+    }
+
+    private static IEnumerable<ITypeSymbol> EnumerateDerivedTypes(Compilation compilation, ISymbol typeSymbol)
+    {
+        var derivedTypes = new Collection<ITypeSymbol>();
+        
+        // All syntax tree in source code
+        foreach (var syntaxTree in compilation.SyntaxTrees)
+        {
+            var model = compilation.GetSemanticModel(syntaxTree);
+            
+            // All declared classes
+            var allClasses = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
+            // Check for all classes if is a derived type of typeSymbol
+            foreach (var classDeclarationSyntax in allClasses)
+            {
+                var candidateSymbol = model.GetDeclaredSymbol(classDeclarationSyntax) as INamedTypeSymbol;
+                if (!IsDerivedFrom(candidateSymbol?.BaseType, typeSymbol))
+                    continue;
+                
+                derivedTypes.Add(candidateSymbol);
+            }
+        }
+
+        return derivedTypes;
+    }
+    
+    private static bool IsDerivedFrom(INamedTypeSymbol candidate, ISymbol baseType)
+    {
+        while (candidate is not null)
+        {
+            if (candidate.Equals(baseType, SymbolEqualityComparer.Default))
+                return true;
+            candidate = candidate.BaseType;
+        }
+
+        return false;
+    }
+
+    private static void BuildEventEntity(ISymbol symbol)
+    {
+        // TODO: create a event entity class with domain type conversion...
     }
 }
