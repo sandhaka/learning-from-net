@@ -6,7 +6,7 @@ namespace EventSourcingSourceGeneratorTarget.Infrastructure;
 // TODO Auto-Generated
 internal partial interface IEventsStore
 {
-    public Task<IEnumerable<PortEventData>> GetPortEventsAsync();
+    public Task<IEnumerable<PortEventData>> LoadAsync();
     public Task<Option<ShipEntity>> GetShipAsync(Guid shipId);
     public Task<Option<PortEntity>> GetPortAsync(Guid portId);
     public Task<(bool Added, Guid Id)> AddShipAsync(ShipEntity entity);
@@ -28,7 +28,7 @@ internal sealed partial class HarbourMasterStore : IEventsStore
         _database = client.GetDatabase("es_source");
     }
 
-    public async Task<IEnumerable<PortEventData>> GetPortEventsAsync()
+    public async Task<IEnumerable<PortEventData>> LoadAsync()
     {
         var asyncCursor = await PortEventCollection().FindAsync(Builders<PortEventData>.Filter.Empty);
         return asyncCursor.ToEnumerable();

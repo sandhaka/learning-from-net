@@ -1,4 +1,5 @@
 using System.Text.Json;
+using EventSourcingSourceGenerator.Attributes;
 using EventSourcingSourceGeneratorTarget.Infrastructure;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
@@ -7,6 +8,7 @@ namespace EventSourcingSourceGeneratorTarget.Models;
 /// Simplified example model of a harbour master office, it holds the ships fleet and a ports collection.
 /// With Dock() and Sail() methods track navigation activities.
 /// </summary>
+[EventsStoreGeneratorTarget]
 internal sealed partial class HarbourMaster : IAggregateRoot
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions =
@@ -14,7 +16,8 @@ internal sealed partial class HarbourMaster : IAggregateRoot
 
     private readonly IEventsStore _store;
 
-    private readonly IList<PortEvent> _events = [];
+    [EventTypeTarget]
+    private readonly IList<PortEvent> _events = new List<PortEvent>();
     private readonly HashSet<Ship> _ships = [];
     private readonly HashSet<Port> _ports = [];
 
@@ -131,7 +134,7 @@ internal sealed partial class HarbourMaster : IAggregateRoot
         if (_events.Any())
             throw new ApplicationException($"Object {GetType().Name} is initialized. Create a new instance and retry.");
             
-        var events = await _store.GetPortEventsAsync();
+        var events = await _store.LoadAsync();
 
         foreach (var @event in events)
         {

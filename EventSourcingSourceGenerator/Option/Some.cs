@@ -1,4 +1,4 @@
-namespace EventSourcingSourceGeneratorTarget.Option;
+namespace EventSourcingSourceGenerator.Option;
 
 public class Some<T> : Option<T>
 {
