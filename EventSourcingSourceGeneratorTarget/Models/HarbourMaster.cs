@@ -16,7 +16,7 @@ internal sealed partial class HarbourMaster : IAggregateRoot
 
     private readonly IEventsStore _store;
 
-    [EventTypeTarget]
+    [EventBaseTypeTarget]
     private readonly IList<PortEvent> _events = new List<PortEvent>();
     private readonly HashSet<Ship> _ships = [];
     private readonly HashSet<Port> _ports = [];
@@ -75,8 +75,13 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     {
         ArgumentNullException.ThrowIfNull(portId, nameof(portId));
         ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
-        
-        var @event = new ShipHasSailed(DateTime.UtcNow, shipId, portId);
+
+        var @event = new ShipHasSailed
+        {
+            UtcDateTime = DateTime.UtcNow,
+            PortId = portId,
+            ShipId = shipId
+        };
         await ApplyAsync(@event);
     }
 
@@ -90,7 +95,12 @@ internal sealed partial class HarbourMaster : IAggregateRoot
         ArgumentNullException.ThrowIfNull(portId, nameof(portId));
         ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
         
-        var @event = new ShipHasDocked(DateTime.UtcNow, shipId, portId);
+        var @event = new ShipHasDocked
+        {
+            UtcDateTime = DateTime.UtcNow,
+            PortId = portId,
+            ShipId = shipId
+        };
         await ApplyAsync(@event);
     }
     
