@@ -15,11 +15,11 @@ internal partial interface IEventsStore
 }
 
 // TODO Auto-Generated
-internal sealed partial class HarbourMasterStore : IEventsStore
+internal sealed partial class HarbourMasterEventsStore : IEventsStore
 {
     private readonly IMongoDatabase _database;
 
-    public HarbourMasterStore()
+    public HarbourMasterEventsStore()
     {
         var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTIONSTRING") ??
                                throw new ArgumentNullException("MONGODB_CONNECTIONSTRING");

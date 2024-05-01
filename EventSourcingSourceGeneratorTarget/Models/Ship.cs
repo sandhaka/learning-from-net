@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using EventSourcingSourceGeneratorTarget.Option;
 
 namespace EventSourcingSourceGeneratorTarget.Models;
 

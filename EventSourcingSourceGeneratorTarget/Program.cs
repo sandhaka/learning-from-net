@@ -1,7 +1,7 @@
 ﻿using EventSourcingSourceGeneratorTarget.Infrastructure;
 using EventSourcingSourceGeneratorTarget.Models;
 
-var firstHarbourMoInstance = new HarbourMaster(new HarbourMasterStore());
+var firstHarbourMoInstance = new HarbourMaster(new HarbourMasterEventsStore());
 
 #region  [Sample setup]
 var stMariaShipId = await firstHarbourMoInstance.RegisterShipAsync("St.Maria", 8000.00f);
@@ -36,7 +36,7 @@ await firstHarbourMoInstance.LocateAsync(stMariaShipId);
 await firstHarbourMoInstance.SaveCurrentStateAsync();
 // ...
 
-var anotherHarbourMoInstance = new HarbourMaster(new HarbourMasterStore());
+var anotherHarbourMoInstance = new HarbourMaster(new HarbourMasterEventsStore());
 
 // Reload from saved data
 await anotherHarbourMoInstance.HydrateAsync();

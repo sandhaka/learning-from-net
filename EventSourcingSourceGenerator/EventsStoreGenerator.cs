@@ -80,9 +80,23 @@ public class EventsStoreGenerator : ISourceGenerator
             TypeNames = derivedTypes.Select(x => x.Name)
         };
 
+        var eventsStoreCodeParameters = new EventsStoreCodeParameter
+        {
+            RootNamespace = rootNamespaceName,
+            TypeNamespace = eventType.ContainingNamespace.ToString(),
+            
+        };
+
         var eventDataSourceText = BuildEventEntitySourceCode(eventCodeParameters);
+        var optionSourceText = BuildOptionUtilsSourceCode(rootNamespaceName);
+        var someSourceText = BuildSomeUtilsSourceCode(rootNamespaceName);
+        var noneSourceText = BuildNoneUtilsSourceCode(rootNamespaceName);
         
-        context.AddSource($"{eventType.Name}Data.g.cs", eventDataSourceText);
+        context.AddSource($"Infrastructure/{eventType.Name}Data.g.cs", eventDataSourceText);
+        
+        context.AddSource("Option/Option.g.cs", optionSourceText);
+        context.AddSource("Option/Some.g.cs", someSourceText);
+        context.AddSource("Option/None.g.cs", noneSourceText);
     }
 
     private string ReadEmbeddedResource(Assembly assembly, string resourceName)
@@ -272,6 +286,79 @@ public class EventsStoreGenerator : ISourceGenerator
         sourceCode.AppendLine("}");
 
         return SourceText.From(sourceCode.ToString(), Encoding.UTF8);
+    }
+
+    public static SourceText BuildOptionUtilsSourceCode(string rootNamespace)
+    {
+        const string sourceCode = """
+                                  namespace {rootNamespace}.Option;
+
+                                  public interface IOption<out T>
+                                  {
+                                      T Reduce();
+                                      bool IsNone();
+                                  }
+
+                                  public abstract class Option<T> : IOption<T>
+                                  {
+                                      public static implicit operator Option<T>(T value) => new Some<T>(value);
+                                      public static implicit operator Option<T>(None _) => new None<T>();
+                                  
+                                      public abstract T Reduce();
+                                      public abstract bool IsNone();
+                                      
+                                      public IOption<T> AsOption() => this;
+                                  }
+                                  """;
+
+        return SourceText.From(sourceCode.Replace("{rootNamespace}", rootNamespace), Encoding.UTF8); 
+    }
+
+    public static SourceText BuildSomeUtilsSourceCode(string rootNamespace)
+    {
+        const string sourceCode = """
+                                  namespace {rootNamespace}.Option;
+                                  
+                                  public class Some<T> : Option<T>
+                                  {
+                                      public Some(T item)
+                                      {
+                                          Item = item;
+                                      }
+                                      
+                                      public T Item { get; }
+                                      
+                                      public static implicit operator T(Some<T> some) =>
+                                          some.Item;
+                                  
+                                      public override T Reduce() => Item;
+                                      public override bool IsNone() => false;
+                                  }
+                                  """;
+
+        return SourceText.From(sourceCode.Replace("{rootNamespace}", rootNamespace), Encoding.UTF8);  
+    }
+
+    public static SourceText BuildNoneUtilsSourceCode(string rootNamespace)
+    {
+        const string sourceCode = """
+                                  namespace {rootNamespace}.Option;
+                                  
+                                  public class None<T> : Option<T>
+                                  {
+                                      public override T Reduce() => default;
+                                      public override bool IsNone() => true;
+                                  }
+                                  
+                                  public sealed class None
+                                  {
+                                      private static None Value { get; } = new();
+                                      
+                                      private None() { }
+                                  }
+                                  """;
+
+        return SourceText.From(sourceCode.Replace("{rootNamespace}", rootNamespace), Encoding.UTF8);   
     }
 
     private static SourceText BuildStoreSourceCode(EventCodeParameters codeParameters)
