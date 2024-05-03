@@ -1,6 +1,6 @@
 namespace EventSourcingSourceGenerator.Option;
 
-public class None<T> : Option<T>
+internal class None<T> : Option<T>
 {
     public override T Reduce() => default;
     public override bool IsNone() => true;

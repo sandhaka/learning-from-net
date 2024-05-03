@@ -16,7 +16,7 @@ internal sealed partial class HarbourMaster : IAggregateRoot
 
     private readonly IEventsStore _store;
 
-    [EventBaseTypeTarget]
+    [EventBaseTypeTarget(DateTimeEventPropertyName: "UtcDateTime", TableOrCollectionName: "portEvents")]
     private readonly IList<PortEvent> _events = new List<PortEvent>();
     private readonly HashSet<Ship> _ships = [];
     private readonly HashSet<Port> _ports = [];

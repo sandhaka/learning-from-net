@@ -1,6 +1,6 @@
 namespace EventSourcingSourceGenerator.Option;
 
-public class Some<T> : Option<T>
+internal class Some<T> : Option<T>
 {
     public Some(T item)
     {

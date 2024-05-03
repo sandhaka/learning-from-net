@@ -1,0 +1,49 @@
+using {{RootNamespace}}.Option;
+using MongoDB.Driver;
+
+namespace {{RootNamespace}}.Infrastructure;
+
+internal partial interface I{{ClassName}}EventsStore
+{
+    public Task<IEnumerable<{{EventClassName}}>> LoadAsync();
+    public Task SaveAsync(IReadOnlyList<{{EventClassName}}> events);
+}
+
+internal sealed partial class {{ClassName}}EventsStore : {{InterfaceName}}
+{
+    private readonly IMongoDatabase _database;
+
+    public {{ClassName}}EventsStore()
+    {
+        var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTIONSTRING") ??
+                               throw new ArgumentNullException("MONGODB_CONNECTIONSTRING");
+        
+        var client = new MongoClient(connectionString);
+        _database = client.GetDatabase("es_source");
+    }
+
+    public async Task<IEnumerable<{{EventClassName}}>> LoadAsync()
+    {
+        var asyncCursor = await PortEventCollection().FindAsync(Builders<{{EventClassName}}>.Filter.Empty);
+        return asyncCursor.ToEnumerable();
+    }
+
+    public async Task SaveAsync(IReadOnlyList<{{EventClassName}}> events)
+    {
+        var sortDefinition = Builders<{{EventClassName}}>.Sort.Descending(x => x.{{DateTimeEventPropertyName}});
+        var filterDefinition = Builders<{{EventClassName}}>.Filter.Empty;
+
+        var lastEvent = await PortEventCollection()
+            .Find(filterDefinition)
+            .Sort(sortDefinition)
+            .Limit(1)
+            .FirstOrDefaultAsync();
+        
+        var evts = events.Where(x => x.{{DateTimeEventPropertyName}} > (lastEvent?.{{DateTimeEventPropertyName}} ?? DateTime.MinValue));
+
+        await PortEventCollection().InsertManyAsync(evts);
+    }
+
+    private IMongoCollection<{{EventClassName}}> PortEventCollection() =>
+        _database.GetCollection<{{EventClassName}}>("{{TableOrCollectionName}}");
+}

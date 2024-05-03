@@ -12,6 +12,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+using EventTypeDetailedResult = (
+    Microsoft.CodeAnalysis.ITypeSymbol TypeSymbol,
+    string DateTimeEventPropertyName,
+    string TableOrCollectionName
+    );
+
 /*
  * Emitting infrastructure source code for event sourcing based project from Root Aggregate and his event types.
  */
@@ -52,7 +58,7 @@ public class EventsStoreGenerator : ISourceGenerator
         if (searchResult.IsNone())
             return;
 
-        var eventType = searchResult.Reduce();
+        var (eventType, dateTimeEventPropertyName, tableOrCollectionName) = searchResult.Reduce();
 
         Console.WriteLine($"Found a target type name for event store: {eventType.Name}");
         
@@ -84,10 +90,15 @@ public class EventsStoreGenerator : ISourceGenerator
         {
             RootNamespace = rootNamespaceName,
             TypeNamespace = eventType.ContainingNamespace.ToString(),
-            
+            ClassName = classSyntax.Identifier.ValueText,
+            EventClassName = eventType.Name,
+            DateTimeEventPropertyName = dateTimeEventPropertyName,
+            TableOrCollectionName = tableOrCollectionName,
+            Template = templateContent
         };
 
         var eventDataSourceText = BuildEventEntitySourceCode(eventCodeParameters);
+        var eventsStoreSourceText = BuildStoreSourceCode(eventsStoreCodeParameters);
         var optionSourceText = BuildOptionUtilsSourceCode(rootNamespaceName);
         var someSourceText = BuildSomeUtilsSourceCode(rootNamespaceName);
         var noneSourceText = BuildNoneUtilsSourceCode(rootNamespaceName);
@@ -107,7 +118,8 @@ public class EventsStoreGenerator : ISourceGenerator
         return reader.ReadToEnd();
     }
 
-    private Option<ITypeSymbol> SearchEventTypeInTargetClass(SemanticModel model,
+    private Option<EventTypeDetailedResult> SearchEventTypeInTargetClass(
+        SemanticModel model,
         TypeDeclarationSyntax classDeclarationSyntax)
     {
         var variablesDeclarations = classDeclarationSyntax.Members
@@ -118,12 +130,16 @@ public class EventsStoreGenerator : ISourceGenerator
         foreach (var variableDeclarationSyntax in variablesDeclarations)
         {
             // Search member attribute
-            var eventTypeDeclarationLocated = variableDeclarationSyntax.AttributeLists
-                .Any(sm => sm.Attributes
-                    .Any(a => a.Name.IsAttribute<EventBaseTypeTargetAttribute>()));
-
-            if (!eventTypeDeclarationLocated)
+            var attrSearchResult = variableDeclarationSyntax.AttributeLists.SelectMany(sm => sm.Attributes)
+                .FirstOrNone(a => a.Name.IsAttribute<EventBaseTypeTargetAttribute>());
+            
+            if (attrSearchResult.IsNone())
                 continue;
+
+            var attribute = attrSearchResult.Reduce();
+            
+            var dateTimeEventPropertyName = attribute.ArgumentList!.Arguments[0].Expression.ToString().Trim('"');
+            var tableOrCollectionName = attribute.ArgumentList!.Arguments[1].Expression.ToString().Trim('"');
 
             // Get the symbol for the variable declarator
             foreach (var variableDeclaratorSyntax in variableDeclarationSyntax.Declaration.Variables)
@@ -138,12 +154,15 @@ public class EventsStoreGenerator : ISourceGenerator
 
                 if (IsIEnumerableGenericType(namedTypeSymbol))
                 {
-                    return new Some<ITypeSymbol>(namedTypeSymbol.TypeArguments.Single());
+                    return new Some<EventTypeDetailedResult>((
+                        TypeSymbol: namedTypeSymbol.TypeArguments.Single(), 
+                        DateTimeEventPropertyName: dateTimeEventPropertyName,
+                        TableOrCollectionName: tableOrCollectionName));
                 }
             }
         }
 
-        return new None<ITypeSymbol>();
+        return new None<EventTypeDetailedResult>();
     }
 
     private static bool IsIEnumerableGenericType(INamedTypeSymbol namedTypeSymbol)
@@ -361,9 +380,18 @@ public class EventsStoreGenerator : ISourceGenerator
         return SourceText.From(sourceCode.Replace("{rootNamespace}", rootNamespace), Encoding.UTF8);   
     }
 
-    private static SourceText BuildStoreSourceCode(EventCodeParameters codeParameters)
+    private static SourceText BuildStoreSourceCode(EventsStoreCodeParameter codeParameters)
     {
         var sourceCode = new StringBuilder();
+
+        var eventEntityName = $"{codeParameters.EventClassName}Data";
+
+        var generatedFromTemplate = codeParameters.Template
+            .Replace("{{RootNamespace}}", codeParameters.RootNamespace)
+            .Replace("{{ClassName}}", codeParameters.ClassName)
+            .Replace("{{EventClassName}}", eventEntityName);
+        
+        sourceCode.Append(generatedFromTemplate);
         
         return SourceText.From(sourceCode.ToString(), Encoding.UTF8);
     }
