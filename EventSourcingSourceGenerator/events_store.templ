@@ -9,7 +9,7 @@ internal partial interface I{{ClassName}}EventsStore
     public Task SaveAsync(IReadOnlyList<{{EventClassName}}> events);
 }
 
-internal sealed partial class {{ClassName}}EventsStore : {{InterfaceName}}
+internal sealed partial class {{ClassName}}EventsStore : I{{ClassName}}EventsStore
 {
     private readonly IMongoDatabase _database;
 
@@ -19,12 +19,12 @@ internal sealed partial class {{ClassName}}EventsStore : {{InterfaceName}}
                                throw new ArgumentNullException("MONGODB_CONNECTIONSTRING");
         
         var client = new MongoClient(connectionString);
-        _database = client.GetDatabase("es_source");
+        _database = client.GetDatabase("{{DatabaseName}}");
     }
 
     public async Task<IEnumerable<{{EventClassName}}>> LoadAsync()
     {
-        var asyncCursor = await PortEventCollection().FindAsync(Builders<{{EventClassName}}>.Filter.Empty);
+        var asyncCursor = await EventCollection().FindAsync(Builders<{{EventClassName}}>.Filter.Empty);
         return asyncCursor.ToEnumerable();
     }
 
@@ -33,7 +33,7 @@ internal sealed partial class {{ClassName}}EventsStore : {{InterfaceName}}
         var sortDefinition = Builders<{{EventClassName}}>.Sort.Descending(x => x.{{DateTimeEventPropertyName}});
         var filterDefinition = Builders<{{EventClassName}}>.Filter.Empty;
 
-        var lastEvent = await PortEventCollection()
+        var lastEvent = await EventCollection()
             .Find(filterDefinition)
             .Sort(sortDefinition)
             .Limit(1)
@@ -41,9 +41,9 @@ internal sealed partial class {{ClassName}}EventsStore : {{InterfaceName}}
         
         var evts = events.Where(x => x.{{DateTimeEventPropertyName}} > (lastEvent?.{{DateTimeEventPropertyName}} ?? DateTime.MinValue));
 
-        await PortEventCollection().InsertManyAsync(evts);
+        await EventCollection().InsertManyAsync(evts);
     }
 
-    private IMongoCollection<{{EventClassName}}> PortEventCollection() =>
+    private IMongoCollection<{{EventClassName}}> EventCollection() =>
         _database.GetCollection<{{EventClassName}}>("{{TableOrCollectionName}}");
 }

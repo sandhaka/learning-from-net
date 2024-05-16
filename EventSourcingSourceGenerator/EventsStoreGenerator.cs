@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.Text;
 using EventTypeDetailedResult = (
     Microsoft.CodeAnalysis.ITypeSymbol TypeSymbol,
     string DateTimeEventPropertyName,
+    string DbName,
     string TableOrCollectionName
     );
 
@@ -58,7 +59,7 @@ public class EventsStoreGenerator : ISourceGenerator
         if (searchResult.IsNone())
             return;
 
-        var (eventType, dateTimeEventPropertyName, tableOrCollectionName) = searchResult.Reduce();
+        var (eventType, dateTimeEventPropertyName, dbName, tableOrCollectionName) = searchResult.Reduce();
 
         Console.WriteLine($"Found a target type name for event store: {eventType.Name}");
         
@@ -94,7 +95,8 @@ public class EventsStoreGenerator : ISourceGenerator
             EventClassName = eventType.Name,
             DateTimeEventPropertyName = dateTimeEventPropertyName,
             TableOrCollectionName = tableOrCollectionName,
-            Template = templateContent
+            Template = templateContent,
+            DatabaseName = dbName
         };
 
         var eventDataSourceText = BuildEventEntitySourceCode(eventCodeParameters);
@@ -104,6 +106,7 @@ public class EventsStoreGenerator : ISourceGenerator
         var noneSourceText = BuildNoneUtilsSourceCode(rootNamespaceName);
         
         context.AddSource($"Infrastructure/{eventType.Name}Data.g.cs", eventDataSourceText);
+        context.AddSource($"Infrastructure/{eventType.Name}EventsStore.g.cs", eventsStoreSourceText);
         
         context.AddSource("Option/Option.g.cs", optionSourceText);
         context.AddSource("Option/Some.g.cs", someSourceText);
@@ -139,7 +142,8 @@ public class EventsStoreGenerator : ISourceGenerator
             var attribute = attrSearchResult.Reduce();
             
             var dateTimeEventPropertyName = attribute.ArgumentList!.Arguments[0].Expression.ToString().Trim('"');
-            var tableOrCollectionName = attribute.ArgumentList!.Arguments[1].Expression.ToString().Trim('"');
+            var dbName = attribute.ArgumentList!.Arguments[1].Expression.ToString().Trim('"');
+            var tableOrCollectionName = attribute.ArgumentList!.Arguments[2].Expression.ToString().Trim('"');
 
             // Get the symbol for the variable declarator
             foreach (var variableDeclaratorSyntax in variableDeclarationSyntax.Declaration.Variables)
@@ -157,6 +161,7 @@ public class EventsStoreGenerator : ISourceGenerator
                     return new Some<EventTypeDetailedResult>((
                         TypeSymbol: namedTypeSymbol.TypeArguments.Single(), 
                         DateTimeEventPropertyName: dateTimeEventPropertyName,
+                        DbName: dbName,
                         TableOrCollectionName: tableOrCollectionName));
                 }
             }
@@ -389,7 +394,10 @@ public class EventsStoreGenerator : ISourceGenerator
         var generatedFromTemplate = codeParameters.Template
             .Replace("{{RootNamespace}}", codeParameters.RootNamespace)
             .Replace("{{ClassName}}", codeParameters.ClassName)
-            .Replace("{{EventClassName}}", eventEntityName);
+            .Replace("{{EventClassName}}", eventEntityName)
+            .Replace("{{DatabaseName}}", codeParameters.DatabaseName)
+            .Replace("{{DateTimeEventPropertyName}}", codeParameters.DateTimeEventPropertyName)
+            .Replace("{{TableOrCollectionName}}", codeParameters.TableOrCollectionName);
         
         sourceCode.Append(generatedFromTemplate);
         

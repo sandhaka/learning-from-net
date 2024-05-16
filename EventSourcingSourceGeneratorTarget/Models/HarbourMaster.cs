@@ -14,14 +14,14 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     private readonly JsonSerializerOptions _jsonSerializerOptions =
         new JsonSerializerOptions { WriteIndented = true };
 
-    private readonly IEventsStore _store;
+    private readonly IHarbourMasterEventsStore _store;
 
-    [EventBaseTypeTarget(DateTimeEventPropertyName: "UtcDateTime", TableOrCollectionName: "portEvents")]
+    [EventBaseTypeTarget(DateTimeEventPropertyName: "UtcDateTime", dbName:"es_source", TableOrCollectionName: "portEvents")]
     private readonly IList<PortEvent> _events = new List<PortEvent>();
     private readonly HashSet<Ship> _ships = [];
     private readonly HashSet<Port> _ports = [];
 
-    public HarbourMaster(IEventsStore store)
+    public HarbourMaster(IHarbourMasterEventsStore store)
     {
         _store = store;
     }

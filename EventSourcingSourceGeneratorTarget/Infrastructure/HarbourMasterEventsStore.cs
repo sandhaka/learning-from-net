@@ -3,37 +3,19 @@ using MongoDB.Driver;
 
 namespace EventSourcingSourceGeneratorTarget.Infrastructure;
 
-// TODO Auto-Generated
-internal partial interface IEventsStore
+internal partial interface IHarbourMasterEventsStore
 {
-    public Task<IEnumerable<PortEventData>> LoadAsync();
     public Task<Option<ShipEntity>> GetShipAsync(Guid shipId);
     public Task<Option<PortEntity>> GetPortAsync(Guid portId);
     public Task<(bool Added, Guid Id)> AddShipAsync(ShipEntity entity);
     public Task<(bool Added, Guid Id)> AddPortAsync(PortEntity entity);
-    public Task SaveAsync(IReadOnlyList<PortEventData> events);
 }
 
-// TODO Auto-Generated
-internal sealed partial class HarbourMasterEventsStore : IEventsStore
+/// <summary>
+/// Additional methods for events store
+/// </summary>
+internal sealed partial class HarbourMasterEventsStore : IHarbourMasterEventsStore
 {
-    private readonly IMongoDatabase _database;
-
-    public HarbourMasterEventsStore()
-    {
-        var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTIONSTRING") ??
-                               throw new ArgumentNullException("MONGODB_CONNECTIONSTRING");
-        
-        var client = new MongoClient(connectionString);
-        _database = client.GetDatabase("es_source");
-    }
-
-    public async Task<IEnumerable<PortEventData>> LoadAsync()
-    {
-        var asyncCursor = await PortEventCollection().FindAsync(Builders<PortEventData>.Filter.Empty);
-        return asyncCursor.ToEnumerable();
-    }
-
     public async Task<Option<ShipEntity>> GetShipAsync(Guid shipId)
     {
         var filterDefinition = Builders<ShipEntity>.Filter.Eq(x => x.Id, shipId);
@@ -101,25 +83,6 @@ internal sealed partial class HarbourMasterEventsStore : IEventsStore
 
         return (Added: true, entity.Id);
     }
-
-    public async Task SaveAsync(IReadOnlyList<PortEventData> events)
-    {
-        var sortDefinition = Builders<PortEventData>.Sort.Descending(x => x.UtcDateTime);
-        var filterDefinition = Builders<PortEventData>.Filter.Empty;
-
-        var lastEvent = await PortEventCollection()
-            .Find(filterDefinition)
-            .Sort(sortDefinition)
-            .Limit(1)
-            .FirstOrDefaultAsync();
-        
-        var evts = events.Where(x => x.UtcDateTime > (lastEvent?.UtcDateTime ?? DateTime.MinValue));
-
-        await PortEventCollection().InsertManyAsync(evts);
-    }
-
-    private IMongoCollection<PortEventData> PortEventCollection() =>
-        _database.GetCollection<PortEventData>("portEvents");
     
     private IMongoCollection<PortEntity> PortCollection() =>
         _database.GetCollection<PortEntity>("ports");
