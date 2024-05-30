@@ -18,7 +18,7 @@ Learn from .NET
 #### Source Generators
 
 - [x] [Source Generators Base Sample](SourceGeneratorSample)
-- [ ] [Source Generators applied on event sourcing](EventSourcingSourceGenerator)
+- [x] [Source Generators applied on event sourcing](EventSourcingSourceGenerator)
 - [ ] Incremental Generators Base Sample
 
 #### Miscellaneous
