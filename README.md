@@ -24,5 +24,6 @@ Learn from .NET
 #### Miscellaneous
 
 - [x] [Trace test](TraceTesting)
+- [x] [gZipStream usage](CompressionSample/)
 
 </samp>

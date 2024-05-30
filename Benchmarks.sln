@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingSourceGenerato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcingSourceGeneratorTarget", "EventSourcingSourceGeneratorTarget\EventSourcingSourceGeneratorTarget.csproj", "{763CFF24-CDDE-49A7-BA47-18E15D317890}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompressionSample", "CompressionSample\CompressionSample.csproj", "{C0B17D10-D02D-47D1-9618-10F4401CF4CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{763CFF24-CDDE-49A7-BA47-18E15D317890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B17D10-D02D-47D1-9618-10F4401CF4CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B17D10-D02D-47D1-9618-10F4401CF4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B17D10-D02D-47D1-9618-10F4401CF4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B17D10-D02D-47D1-9618-10F4401CF4CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
