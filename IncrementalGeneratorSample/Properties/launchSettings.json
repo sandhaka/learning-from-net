@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IncrementalGenerators": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../IncrementalGeneratorTarget/IncrementalGeneratorTarget.csproj"
+    }
+  }
+}
