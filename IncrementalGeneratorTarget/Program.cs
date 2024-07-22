@@ -4,8 +4,10 @@
  * You can imagine this example about different mapping use cases like mapping from domain to dto or view models.
  */
 
-using IncrementalGeneratorTarget.Dal;
+using System.Text.Json;
 using IncrementalGeneratorTarget.DomainModels;
+
+var serializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
 var book = new SampleDomainClassOfBook
 {
@@ -19,4 +21,6 @@ var book = new SampleDomainClassOfBook
 
 Console.WriteLine(book.DescribeFull());
 
-// var bookEntity = BookEntity.From(book);
+var bookEntity = book.ToBookEntity(); // Generated method
+
+Console.WriteLine(JsonSerializer.Serialize(bookEntity, serializerOptions));

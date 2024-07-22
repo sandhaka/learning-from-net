@@ -1,6 +1,6 @@
 namespace IncrementalGeneratorTarget.Dal;
 
-public sealed partial class BookEntity
+public sealed class BookEntity
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

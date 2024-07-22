@@ -4,7 +4,7 @@ using IncrementalGeneratorTarget.Dal;
 namespace IncrementalGeneratorTarget.DomainModels;
 
 [MapTo(typeof(BookEntity))]
-public sealed class SampleDomainClassOfBook
+public sealed partial class SampleDomainClassOfBook
 {
     public required string Title { get; init; }
     public required string AuthorName { get; init; }
