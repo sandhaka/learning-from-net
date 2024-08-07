@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalGeneratorSample"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangFeaturesSamples", "LangFeaturesSamples\LangFeaturesSamples.csproj", "{07DC6E46-FBC1-46FE-AC9E-BE34C845DB1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestOverBadPractices", "BestOverBadPractices\BestOverBadPractices.csproj", "{26880CE6-9E68-4E19-B0A8-D899943D14F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionOverInheritance", "CompositionOverInheritance\CompositionOverInheritance.csproj", "{26880CE6-9E68-4E19-B0A8-D899943D14F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

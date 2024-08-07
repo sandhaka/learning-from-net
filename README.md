@@ -14,7 +14,7 @@ Learn from .NET
 
 - [x] [Liskov Principle](./lsp)
 - [x] [Variance And Contravariance](./VarianceAndControvariance)
-- [ ] [General Best Practices in OOP Modelling Samples](./BestOverBadPractices)
+- [ ] [Composition Over Inheritance](./CompositionOverInheritance)
 
 #### Source Generators
 
