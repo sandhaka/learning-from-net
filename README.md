@@ -6,25 +6,26 @@ Learn from .NET
 
 #### Benchmarks
 
-- [x] [Collections](FrozenCollectionsBmk) 
-- [x] [Execution on Stack](StackExecutingBmk)
-- [x] [Allocations](StackAlloc)
+- [x] [Collections](./FrozenCollectionsBmk) 
+- [x] [Execution on Stack](./StackExecutingBmk)
+- [x] [Allocations](./StackAlloc)
 
 #### OOP
 
-- [x] [Liskov Principle](lsp)
-- [x] [Variance And Contravariance](VarianceAndControvariance)
+- [x] [Liskov Principle](./lsp)
+- [x] [Variance And Contravariance](./VarianceAndControvariance)
+- [ ] [General Best Practices in OOP Modelling Samples](./BestOverBadPractices)
 
 #### Source Generators
 
-- [x] [Source Generators Base Sample](SourceGeneratorSample)
-- [x] [Source Generators applied on event sourcing](EventSourcingSourceGenerator)
-- [x] [Incremental Generators Base Sample](IncrementalGeneratorSample)
+- [x] [Source Generators Base Sample](./SourceGeneratorSample)
+- [x] [Source Generators applied on event sourcing](./EventSourcingSourceGenerator)
+- [x] [Incremental Generators Base Sample](./IncrementalGeneratorSample)
 
 #### Miscellaneous
 
-- [x] [Trace test](TraceTesting)
-- [x] [gZipStream usage](CompressionSample/)
-- [ ] [C# Language features samples](LangFeaturesSamples/)
+- [x] [Trace test](./TraceTesting)
+- [x] [gZipStream usage](./CompressionSample)
+- [ ] [C# Language features samples](./LangFeaturesSamples)
 
 </samp>

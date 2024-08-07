@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackExecutingBmk", "StackExecutingBmk\StackExecutingBmk.csproj", "{C1D14982-0A19-4CCE-9356-20B5970EDE39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackAlloc", "StackAlloc\StackAlloc.csproj", "{67525E63-096D-4C06-ABB7-42830148F687}"
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalGeneratorSample", "IncrementalGeneratorSample\IncrementalGeneratorSample.csproj", "{3A8A72E8-0194-4AA7-9154-CD84BC9C9AA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangFeaturesSamples", "LangFeaturesSamples\LangFeaturesSamples.csproj", "{07DC6E46-FBC1-46FE-AC9E-BE34C845DB1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestOverBadPractices", "BestOverBadPractices\BestOverBadPractices.csproj", "{26880CE6-9E68-4E19-B0A8-D899943D14F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{07DC6E46-FBC1-46FE-AC9E-BE34C845DB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07DC6E46-FBC1-46FE-AC9E-BE34C845DB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07DC6E46-FBC1-46FE-AC9E-BE34C845DB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
