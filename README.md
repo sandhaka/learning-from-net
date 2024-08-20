@@ -14,7 +14,7 @@ Learn from .NET
 
 - [x] [Liskov Principle](./lsp)
 - [x] [Variance And Contravariance](./VarianceAndControvariance)
-- [ ] [Composition Over Inheritance](./CompositionOverInheritance)
+- [x] [Composition Over Inheritance](./CompositionOverInheritance)
 
 #### Source Generators
 
