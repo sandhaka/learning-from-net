@@ -8,7 +8,11 @@
 
     <ItemGroup>
       <PackageReference Include="EasyNetQ" Version="7.8.0" />
-      <PackageReference Include="Riok.Mapperly" Version="3.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ec.Domain\Ec.Domain.csproj" />
+      <ProjectReference Include="..\Ec.Infrastructure\Ec.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
