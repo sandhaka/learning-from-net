@@ -18,4 +18,5 @@ public sealed class Building
     public required string State { get; init; }
     public required string Zip { get; init; }
     public required string Country { get; init; }
+    public required int LowerFloor { get; init; }
 }

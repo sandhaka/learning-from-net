@@ -5,7 +5,7 @@ namespace Ec.Infrastructure.Dto;
 public sealed record PhysicalPersonRecord(Guid Id, string Name, string Surname, string Vat)
 {
     public static implicit operator PhysicalPerson(PhysicalPersonRecord record) => 
-        new PhysicalPerson
+        new()
         {
             PersonId = new PhysicalPersonId(record.Id),
             Name = record.Name,
@@ -14,5 +14,5 @@ public sealed record PhysicalPersonRecord(Guid Id, string Name, string Surname, 
         };
     
     public static implicit operator PhysicalPersonRecord(PhysicalPerson domainObject) =>
-        new PhysicalPersonRecord(domainObject.PersonId.Value, domainObject.Name, domainObject.Surname, domainObject.Vat);
+        new(domainObject.PersonId.Value, domainObject.Name, domainObject.Surname, domainObject.Vat);
 }

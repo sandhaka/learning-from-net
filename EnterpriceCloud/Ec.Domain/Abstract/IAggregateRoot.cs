@@ -1,4 +1,4 @@
-namespace Ec.Domain.Models.Abstract;
+namespace Ec.Domain.Abstract;
 
 public interface IAggregateRoot
 {

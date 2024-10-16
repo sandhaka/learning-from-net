@@ -2,5 +2,6 @@ namespace Ec.Domain.Models;
 
 public interface IBuildingElement
 {
-    BuildingId BuildingId { get; }
+    Location Location { get; }
+    string Description { get; }
 }
