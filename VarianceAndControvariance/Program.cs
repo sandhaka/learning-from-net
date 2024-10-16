@@ -20,7 +20,7 @@ z.DoSomethingMore();
 // These four possibilities exists when we are using a reference to the
 // base type and a reference to a derived type.
 
-// Variance can be declared on interfaces and delegate types in C#. 
+// Variance can be declared on interfaces and delegate types in C#.
 // Variance is augmenting the object substitution principle to apply to
 // generic types following the same principles as in non-generic classes.
 
@@ -96,3 +96,18 @@ file interface IConsumer<in T>
 {
     void Consume(T obj);
 }
+
+// Covariance can be applied on delegate, generic, array, interface, etc.
+// Covariance is safe in ouput
+
+// Contravariance is applied to parameters.
+// Contravariance is safe in input
+
+
+
+
+
+
+
+
+

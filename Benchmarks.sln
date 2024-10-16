@@ -31,6 +31,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangFeaturesSamples", "Lang
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionOverInheritance", "CompositionOverInheritance\CompositionOverInheritance.csproj", "{26880CE6-9E68-4E19-B0A8-D899943D14F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ec.Application", "EnterpriceCloud\Ec.Application\Ec.Application.csproj", "{DD528D28-574B-45D8-90DB-370E7DA30A5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ec.Domain", "EnterpriceCloud\Ec.Domain\Ec.Domain.csproj", "{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ec.Infrastructure", "EnterpriceCloud\Ec.Infrastructure\Ec.Infrastructure.csproj", "{FA09FC90-4447-4A73-9399-7865F0678EA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ec", "Ec", "{BCA2D6A8-58A0-4C1D-9E51-95567A4E3F74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,7 +105,22 @@ Global
 		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26880CE6-9E68-4E19-B0A8-D899943D14F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD528D28-574B-45D8-90DB-370E7DA30A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD528D28-574B-45D8-90DB-370E7DA30A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD528D28-574B-45D8-90DB-370E7DA30A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD528D28-574B-45D8-90DB-370E7DA30A5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA09FC90-4447-4A73-9399-7865F0678EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA09FC90-4447-4A73-9399-7865F0678EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA09FC90-4447-4A73-9399-7865F0678EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA09FC90-4447-4A73-9399-7865F0678EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{DD528D28-574B-45D8-90DB-370E7DA30A5C} = {BCA2D6A8-58A0-4C1D-9E51-95567A4E3F74}
+		{03A5B9CF-95AE-4ED0-A165-CD00E9074CBA} = {BCA2D6A8-58A0-4C1D-9E51-95567A4E3F74}
+		{FA09FC90-4447-4A73-9399-7865F0678EA0} = {BCA2D6A8-58A0-4C1D-9E51-95567A4E3F74}
 	EndGlobalSection
 EndGlobal
