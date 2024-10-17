@@ -1,8 +1,9 @@
 using Ec.Domain.Models;
+using Monads.Optional;
 
 namespace Ec.Domain.Repositories.Interfaces;
 
 public interface IBuildingRepository
 {
-    Building GetBuilding(BuildingId buildingId);
+    Option<Building> GetBuilding(BuildingId buildingId);
 }
