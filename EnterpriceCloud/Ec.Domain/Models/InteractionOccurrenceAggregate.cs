@@ -12,6 +12,7 @@ public class InteractionOccurrenceAggregate : EventSourcedAggregate
     public string LatestInteractionSubject { get; private set; } = string.Empty;
     public StringBuilder InteractionPath { get; } = new();
     public string Path => InteractionPath.ToString();
+    public bool UsingElevator { get; private set; } = false;
     
     [SetsRequiredMembers]
     private InteractionOccurrenceAggregate(UserId userId)
@@ -42,24 +43,45 @@ public class InteractionOccurrenceAggregate : EventSourcedAggregate
             case Interacted:
             {
                 InteractionPath.Append($" > At [{element.Description}](${CurrentLocation}) ");
-                
-                // Lift interaction moving to another floor
-                if (element is Lift liftRide)
-                {
-                    CurrentLocation.SetFloor(liftRide.DestinationFloor);
-                }
-                
+                InteractIfTheElementIsALift(element);
+                // TODO
                 break;
             }
             case Leaved:
             {
                 InteractionPath.Append($" > (${CurrentLocation}) --- ");
-                
                 break;
             }
             default: return Feedback.Failure($"Unknown event type: {@event.GetType().Name}");
         }
         
         return Feedback.Successful();
+    }
+    
+    private bool InteractIfTheElementIsALift(IBuildingElement element)
+    {
+        // Lift interaction moving to another floor
+        if (element is Lift lift)
+        {
+            if (UsingElevator)
+            {
+                UsingElevator = false;
+                // Out from elevator to another floor
+                CurrentLocation.SetFloor(lift.Location.Floor);
+            }
+            else
+            {
+                // Otherwise start using the elevator
+                UsingElevator = true;
+            }
+
+            return true;
+        }
+
+        // User can exit from elevator without moving to another floor,
+        // user can change his mind... 
+        UsingElevator = false;
+        
+        return UsingElevator;
     }
 }

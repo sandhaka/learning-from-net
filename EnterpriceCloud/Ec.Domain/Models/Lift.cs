@@ -12,6 +12,5 @@ public sealed class Lift : IBuildingElement
     public required LiftId LiftId { get; init; }
     public required Location Location { get; init; }
     public required string Code { get; init; }
-    public required int DestinationFloor { get; init; }
     public string Description => $"Lift-{Code}";
 }

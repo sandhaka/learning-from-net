@@ -13,7 +13,11 @@ record types due to the absence of a default parameterless constructor. I don't 
 immutable design in db models namespace. You can find mapping logic implemented as implicit conversion operators 
 in the db models classes.
 
-#### Components
-
+#### Setup
+Before start the `Ec.Host` project, run RabbitMq instance
+```shell
+  docker pull rabbitmq:3-management
+  docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
 
 </samp>
