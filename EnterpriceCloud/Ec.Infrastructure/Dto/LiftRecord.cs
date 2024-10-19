@@ -8,8 +8,7 @@ public sealed record LiftRecord(
     double Longitude,
     double Latitude,
     int Floor,
-    string Code,
-    int DestinationFloor)
+    string Code)
 {
     public static implicit operator Lift(LiftRecord record) =>
         new()
@@ -17,11 +16,10 @@ public sealed record LiftRecord(
             LiftId = new LiftId(record.Id),
             Code = record.Code,
             Location = Location.Create(new BuildingId(record.BuildingId), record.Longitude, record.Latitude,
-                record.Floor),
-            DestinationFloor = record.DestinationFloor
+                record.Floor)
         };
 
     public static implicit operator LiftRecord(Lift lift) =>
         new(lift.LiftId.Value, lift.Location.BuildingId.Value, lift.Location.Longitude,
-            lift.Location.Latitude, lift.Location.Floor, lift.Code, lift.DestinationFloor);
+            lift.Location.Latitude, lift.Location.Floor, lift.Code);
 }
