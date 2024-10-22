@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ec", "Ec", "{BCA2D6A8-58A0-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ec.Host", "EnterpriceCloud\Ec.Host\Ec.Host.csproj", "{896B5371-198A-4C34-80D0-6BE25501FD0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "Sorting\Sorting.csproj", "{BD41F728-9FCC-4B5D-A400-30A0F54BEB4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{896B5371-198A-4C34-80D0-6BE25501FD0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896B5371-198A-4C34-80D0-6BE25501FD0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896B5371-198A-4C34-80D0-6BE25501FD0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD41F728-9FCC-4B5D-A400-30A0F54BEB4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD41F728-9FCC-4B5D-A400-30A0F54BEB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD41F728-9FCC-4B5D-A400-30A0F54BEB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD41F728-9FCC-4B5D-A400-30A0F54BEB4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD528D28-574B-45D8-90DB-370E7DA30A5C} = {BCA2D6A8-58A0-4C1D-9E51-95567A4E3F74}

@@ -22,6 +22,10 @@ Learn from .NET
 - [x] [Source Generators applied on event sourcing](./EventSourcingSourceGenerator)
 - [x] [Incremental Generators Base Sample](./IncrementalGeneratorSample)
 
+#### Algorithms
+
+- [x] [Merge Sort](./Sorting/MergeSort.cs)
+
 #### Miscellaneous
 
 - [x] [Trace test](./TraceTesting)
