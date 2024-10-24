@@ -99,6 +99,26 @@ public sealed class DemoService
             Location = Location.Create(_building.BuildingId, 2, 2, 3),
             Code = "liftAtFloor3"
         };
+        
+        // Office entrances
+        var officeEntranceAtFloor1 = new Entry
+        {
+            EntryId = new EntryId(_officeEntranceAtFloor1Id),
+            Location = Location.Create(_building.BuildingId, 1, 1, 1),
+            Code = "officeEntranceAtFloor1"
+        };
+        var officeEntranceAtFloor2 = new Entry
+        {
+            EntryId = new EntryId(_officeEntranceAtFloor2Id),
+            Location = Location.Create(_building.BuildingId, 1, 1, 2),
+            Code = "officeEntranceAtFloor2"
+        };
+        var officeEntranceAtFloor3 = new Entry
+        {
+            EntryId = new EntryId(_officeEntranceAtFloor3Id),
+            Location = Location.Create(_building.BuildingId, 1, 1, 3),
+            Code = "officeEntranceAtFloor3"
+        };
     }
 
     public async Task RunDemoAsync(CancellationToken cancellationToken = default)
