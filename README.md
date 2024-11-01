@@ -25,12 +25,12 @@ Learn from .NET
 #### Algorithms Case Studies
 
 - [x] [Speed up Merge Sort](./Sorting/MergeSort.cs)
+- [ ] [Making Graph traversal generic](./GraphSearch/Graphs)
 
 #### Miscellaneous
 
 - [x] [Trace test](./TraceTesting)
 - [x] [gZipStream usage](./CompressionSample)
 - [ ] [C# Language features samples](./LangFeaturesSamples)
-- [ ] [Enterprise Cloud Native State Of Art Project Sample](./EnterpriceCloud)
 
 </samp>
