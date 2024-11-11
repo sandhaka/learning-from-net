@@ -1,6 +1,8 @@
 namespace GraphSearch.Graph.NodeCollections;
 
-public interface IReadOnlyNodeCollection<T> where T : class
+internal interface IReadOnlyNodeCollection<T> where T : class
 {
-    public IReadOnlyCollection<Node<T>> Nodes { get; }
+    bool Contains(T value);
+    Node<T> this[T value] { get; }
+    ISet<Node<T>> Nodes { get; }
 }

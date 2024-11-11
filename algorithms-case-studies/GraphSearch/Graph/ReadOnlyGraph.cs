@@ -2,9 +2,16 @@ using GraphSearch.Graph.NodeCollections;
 
 namespace GraphSearch.Graph;
 
-public class ReadOnlyGraph<T> : Graph<T> where T : class
+internal sealed class ReadOnlyGraph<T> : BaseGraph<T> where T : class
 {
-    private readonly IReadOnlyNodeCollection<T> _nodes;
-    
-    
+    private ReadOnlyGraph(IEnumerable<Node<T>> nodes)
+    {
+        NodesCollection = new FrozenNodeCollection<T>(nodes);
+    }
+
+    public static ReadOnlyGraph<T> Create(IEnumerable<Node<T>> nodes)
+    {
+        var g = new ReadOnlyGraph<T>(nodes);
+        return g;
+    }
 }
