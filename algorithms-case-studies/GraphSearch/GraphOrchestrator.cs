@@ -13,43 +13,25 @@ public static class GraphOrchestrator<T> where T : class
             .Select(v => new Node<T>(v))
             .ToHashSet();
         
-        SetChildren(nodes, problem);
-        SetParents(nodes);
+        SetNeighborhoods(nodes, problem);
         
         var graph = ReadOnlyGraph<T>.Create(nodes);
         
         return graph;
     }
 
-    private static void SetChildren(HashSet<Node<T>> nodes, IGraphProblem<T> problem)
+    private static void SetNeighborhoods(HashSet<Node<T>> nodes, IGraphProblem<T> problem)
     {
-        foreach (var edge in problem.Edges)
+        for (var i = 0; i < problem.Edges.Count; i++)
         {
+            var edge = problem.Edges.ElementAt(i);
             var node = nodes.Single(n => n.Value.Equals(edge.Key));
-            
-            var children = edge.Value
+
+            var outNodes = edge.Value
                 .Select(v => nodes.Single(n => n.Value.Equals(v)))
                 .ToArray();
 
-            node.Children = null;
-            node.Children = new Memory<Node<T>>(children);
-        }
-    }
-
-    private static void SetParents(HashSet<Node<T>> nodes)
-    {
-        foreach (var node in nodes)
-        {
-            var parent = nodes.FirstOrDefault(n =>
-            {
-                var span = n.Children.Span;
-                foreach (var child in span)
-                    if (child.Value.Equals(node.Value))
-                        return true;
-                return false;
-            });
-            
-            node.Parent = parent;
+            node.Neighbors = new Memory<Node<T>>(outNodes);
         }
     }
 

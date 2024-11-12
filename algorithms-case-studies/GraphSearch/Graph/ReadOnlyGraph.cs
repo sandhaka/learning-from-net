@@ -12,6 +12,7 @@ internal sealed class ReadOnlyGraph<T> : BaseGraph<T> where T : class
     public static ReadOnlyGraph<T> Create(IEnumerable<Node<T>> nodes)
     {
         var g = new ReadOnlyGraph<T>(nodes);
+        
         return g;
     }
 }
