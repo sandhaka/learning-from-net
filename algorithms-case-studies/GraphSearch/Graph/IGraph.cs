@@ -12,10 +12,10 @@ public interface IGraph<T>
     /// Gets or sets an optional action to be performed on each node during graph traversal.
     /// </summary>
     /// <remarks>
-    /// This property allows assigning a delegate of type <c>NodeAction&lt;T&gt;</c> which
+    /// This property allows assigning a delegate of type <c>OnVisit&lt;T&gt;</c> which
     /// can be invoked with the node's value as a parameter during operations like Depth-First Search (DFS).
     /// </remarks>
-    Option<NodeAction<T>> ActionParameter { get; set; }
+    Option<OnVisit<T>> OnVisitActionParameter { get; set; }
 
     /// <summary>
     /// Performs a depth-first search (DFS) on a graph starting from the specified node.
@@ -25,12 +25,11 @@ public interface IGraph<T>
     void Dfs(T start);
 
     /// <summary>
-    /// Gets the set of values contained within the nodes of the graph.
+    /// Retrieves the set of values contained within the nodes of the graph.
     /// </summary>
     /// <remarks>
-    /// This property provides access to the values held by the nodes in the graph.
-    /// It can be useful for operations that need to work with the data stored in nodes,
-    /// such as traversal or search functionality.
+    /// This property returns an `ISet` containing the values of all nodes present in the graph's node collection.
+    /// It provides a way to access all distinct node values in the graph.
     /// </remarks>
     ISet<T> NodeValues { get; }
 }

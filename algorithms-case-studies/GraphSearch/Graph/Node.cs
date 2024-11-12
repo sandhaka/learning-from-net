@@ -17,9 +17,11 @@ internal record Node<T>(T Value) where T : class
     }
     
     public virtual bool IsEmpty => false;
+    
+    public bool HasNeighbors => !Neighbors.IsEmpty;
 }
 
-internal record EmptyNode<T>() : Node<T>(default(T)!) where T : class
+internal record EmptyNode<T>() : Node<T>(default(T)) where T : class
 {
     public override bool IsEmpty => true;
 }

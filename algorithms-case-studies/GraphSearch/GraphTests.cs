@@ -60,8 +60,10 @@ public class GraphTests(ITestOutputHelper output)
         var problem = new SimpleGraphProblem();
         var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
         
-        graph.ActionParameter = Option<NodeAction<string>>.Some(value =>
+        graph.OnVisitActionParameter = Option<OnVisit<string>>.Some(value =>
         {
+            _output.WriteLine($"Visiting {value}");
+            
             if (value.Equals("M"))
                 _output.WriteLine("I'm reached M!");
         });
