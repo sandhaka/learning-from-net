@@ -24,7 +24,7 @@ public static class GraphOrchestrator<T>
         
         SetNeighborhoods(nodes, problem);
         
-        var graph = ReadOnly<T>.Create(nodes);
+        var graph = ReadOnlyGraph<T>.Create(nodes);
         
         return graph;
     }
