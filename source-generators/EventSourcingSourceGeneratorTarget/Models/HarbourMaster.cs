@@ -73,9 +73,6 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async ValueTask SailAsync(Guid portId, Guid shipId)
     {
-        ArgumentNullException.ThrowIfNull(portId, nameof(portId));
-        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
-
         var @event = new ShipHasSailed
         {
             UtcDateTime = DateTime.UtcNow,
@@ -92,9 +89,6 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async ValueTask DockAsync(Guid portId, Guid shipId)
     {
-        ArgumentNullException.ThrowIfNull(portId, nameof(portId));
-        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
-        
         var @event = new ShipHasDocked
         {
             UtcDateTime = DateTime.UtcNow,
@@ -110,8 +104,6 @@ internal sealed partial class HarbourMaster : IAggregateRoot
     /// <param name="shipId">Ship id</param>
     public async Task LocateAsync(Guid shipId)
     {
-        ArgumentNullException.ThrowIfNull(shipId, nameof(shipId));
-        
         var ship = await GetShipAsync(shipId);
         
         var serialized = JsonSerializer.Serialize(new
