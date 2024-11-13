@@ -1,9 +1,9 @@
 namespace GraphSearch.Graph.NodeCollections.Abstractions;
 
-internal interface INodeCollection<T> where T : class
+internal interface INodeCollection<T>
 {
     int NodesCount { get; }
     bool Contains(T value);
     Node<T> this[T value] { get; }
-    IEnumerable<Node<T>> Nodes { get; }
+    IReadOnlySet<T> Values { get; }
 }

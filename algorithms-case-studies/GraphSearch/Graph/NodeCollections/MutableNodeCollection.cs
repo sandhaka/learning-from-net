@@ -5,11 +5,14 @@ using GraphSearch.Graph.NodeCollections.Abstractions;
 namespace GraphSearch.Graph.NodeCollections;
 
 [DebuggerDisplay("{NodesCount} nodes")]
-internal sealed class MutableNodeCollection<T> : NodeCollectionBase<T>, IMutableNodeCollection<T> where T : class
+internal sealed class MutableNodeCollection<T> : IMutableNodeCollection<T>
 {
+    private readonly HashSet<Node<T>> _nodes;
+    
     [SetsRequiredMembers]
-    public MutableNodeCollection(IEnumerable<Node<T>> nodes) : base(nodes)
+    public MutableNodeCollection(IEnumerable<Node<T>> nodes)
     {
+        _nodes = nodes.ToHashSet();
     }
 
     public void Add(T value)
@@ -21,4 +24,12 @@ internal sealed class MutableNodeCollection<T> : NodeCollectionBase<T>, IMutable
     {
         throw new NotImplementedException();
     }
+
+    public int NodesCount => _nodes.Count;
+    
+    public bool Contains(T value) => _nodes.Any(node => node.Value.Equals(value));
+
+    public Node<T> this[T value] => _nodes.Single(node => node.Value.Equals(value));
+    
+    public IReadOnlySet<T> Values => _nodes.Select(n => n.Value).ToHashSet();
 }

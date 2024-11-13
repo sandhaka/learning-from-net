@@ -1,6 +1,6 @@
 namespace GraphSearch.Problems.Abstractions;
 
-public interface IGraphProblem<T> where T : class
+public interface IGraphProblem<T>
 {
-    public IDictionary<T, IEnumerable<T>> Edges { get; }
+    public IDictionary<T, IEnumerable<(T Value, decimal Cost)>> AdjacencyList { get; }
 }

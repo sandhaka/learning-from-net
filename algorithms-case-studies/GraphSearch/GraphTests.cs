@@ -1,7 +1,6 @@
 using System.Text;
 using Monads.Optional;
 using Xunit.Abstractions;
-
 using GraphSearch.Graph;
 using GraphSearch.Problems.Implementations;
 
@@ -32,15 +31,15 @@ internal class CustomTestOutputHelper(ITestOutputHelper output) : ITestOutputHel
 public class GraphTests(ITestOutputHelper output)
 {
     private readonly CustomTestOutputHelper _output = new(output);
-    
+
     [Fact(DisplayName = "Should build a read only graph from a encoded problem.")]
     public void ShouldBuildReadOnlyGraph()
     {
         var problem = new SimpleGraphProblem();
-        
+
         var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
-        
-        Assert.Equal(problem.Edges.Keys.Count, graph.NodeValues.Count);
+
+        Assert.Equal(problem.AdjacencyList.Keys.Count, graph.NodeValues.Count);
     }
 
     [Fact(DisplayName = "Should fail to build a read only graph from a encoded problem.")]
@@ -48,28 +47,45 @@ public class GraphTests(ITestOutputHelper output)
     {
         var problem = new SimpleBuggedGraphProblem();
 
-        Assert.Throws<InvalidGraphDataException<string>>(() =>
-        {
-            GraphOrchestrator<string>.CreateReadOnly(problem);
-        });
+        Assert.Throws<InvalidGraphDataException<string>>(() => { GraphOrchestrator<string>.CreateReadOnly(problem); });
     }
-    
-    [Fact(DisplayName = "Should use an action on graph traversal.")]
-    public void ShouldUseAnActionOnGraphTraversal()
+
+    [Fact(DisplayName = "Should use an action on graph traversal with DFS.")]
+    public void ShouldUseAnActionOnGraphTraversalWithDFS()
     {
         var problem = new SimpleGraphProblem();
         var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
-        
+
         graph.OnVisitActionParameter = Option<OnVisit<string>>.Some(value =>
         {
             _output.WriteLine($"Visiting {value}");
-            
+
             if (value.Equals("M"))
                 _output.WriteLine("I'm reached M!");
         });
-        
-        graph.Dfs("A");
-        
+
+        graph.TraverseDfs("A");
+
+        // Verify
+        Assert.Contains("I'm reached M!", _output.GetOutput());
+    }
+
+    [Fact(DisplayName = "Should use an action on graph traversal with BFS.")]
+    public void ShouldUseAnActionOnGraphTraversalWithBFS()
+    {
+        var problem = new SimpleGraphProblem();
+        var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
+
+        graph.OnVisitActionParameter = Option<OnVisit<string>>.Some(value =>
+        {
+            _output.WriteLine($"Visiting {value}");
+
+            if (value.Equals("M"))
+                _output.WriteLine("I'm reached M!");
+        });
+
+        graph.TraverseBfs("A");
+
         // Verify
         Assert.Contains("I'm reached M!", _output.GetOutput());
     }

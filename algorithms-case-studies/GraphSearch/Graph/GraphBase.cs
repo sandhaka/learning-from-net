@@ -5,14 +5,14 @@ namespace GraphSearch.Graph;
 
 public delegate void OnVisit<in T>(T node);
 
-internal abstract class BaseGraph<T> : IGraph<T> where T : class
+internal abstract class GraphBase<T> : IGraph<T>
 {
     protected INodeCollection<T> NodesCollection;
-    
-    public ISet<T> NodeValues => NodesCollection.Nodes.Select(n => n.Value).ToHashSet();
+
+    public IReadOnlySet<T> NodeValues => NodesCollection.Values;
     public Option<OnVisit<T>> OnVisitActionParameter { get; set; } = Option<OnVisit<T>>.None();
 
-    public void Dfs(T start)
+    public void TraverseDfs(T start)
     {
         if (!NodesCollection.Contains(start)) return;
         
@@ -24,7 +24,6 @@ internal abstract class BaseGraph<T> : IGraph<T> where T : class
         {
             node = stack.Pop();
             
-            // Visit
             visited.Add(node);
             ActionExecute(node);
             
@@ -33,15 +32,15 @@ internal abstract class BaseGraph<T> : IGraph<T> where T : class
             for (var i = 0; i < childrenLength; i++)
             {
                 var child = node.Neighbors.Span[i];
-                if (visited.Contains(child)) 
+                if (visited.Contains(child.To)) 
                     continue;
                 
-                stack.Push(child);
+                stack.Push(child.To);
             }
         }
     }
     
-    public void Bfs(T start)
+    public void TraverseBfs(T start)
     {
         if (!NodesCollection.Contains(start)) return;
         
@@ -53,7 +52,6 @@ internal abstract class BaseGraph<T> : IGraph<T> where T : class
         {
             node = queue.Dequeue();
             
-            // Visit
             ActionExecute(node);
             
             var childrenLength = node.Neighbors.Length;
@@ -61,10 +59,10 @@ internal abstract class BaseGraph<T> : IGraph<T> where T : class
             for (var i = 0; i < childrenLength; i++)
             {
                 var child = node.Neighbors.Span[i];
-                if (!visited.Add(child)) 
+                if (!visited.Add(child.To)) 
                     continue;
                 
-                queue.Enqueue(child);
+                queue.Enqueue(child.To);
             }
         }
     }

@@ -4,24 +4,19 @@ using Monads.Optional;
 namespace GraphSearch.Graph;
 
 [DebuggerDisplay("{Value}")]
-internal record Node<T>(T Value) where T : class
+internal record Node<T>(T Value)
 {
-    private ValueOption<Memory<Node<T>>> _neighbors = ValueOption<Memory<Node<T>>>.None();
+    private ValueOption<Memory<Edge<T>>> _neighbors = ValueOption<Memory<Edge<T>>>.None();
     
-    public Memory<Node<T>> Neighbors
+    public Memory<Edge<T>> Neighbors
     {
-        get => _neighbors.Reduce(Memory<Node<T>>.Empty);
+        get => _neighbors.Reduce(Memory<Edge<T>>.Empty);
         set => _neighbors = value.IsEmpty
-            ? ValueOption<Memory<Node<T>>>.None()
-            : ValueOption<Memory<Node<T>>>.Some(value);
+            ? ValueOption<Memory<Edge<T>>>.None()
+            : ValueOption<Memory<Edge<T>>>.Some(value);
     }
     
     public virtual bool IsEmpty => false;
     
     public bool HasNeighbors => !Neighbors.IsEmpty;
-}
-
-internal record EmptyNode<T>() : Node<T>(default(T)) where T : class
-{
-    public override bool IsEmpty => true;
 }

@@ -22,7 +22,14 @@ public interface IGraph<T>
     /// The method traverses the graph and optionally executes a specified action on each node encountered.
     /// </summary>
     /// <param name="start">The node from which the DFS will begin.</param>
-    void Dfs(T start);
+    void TraverseDfs(T start);
+
+    /// <summary>
+    /// Performs a breadth-first search (BFS) on a graph starting from the specified node.
+    /// The method traverses the graph and optionally executes a specified action on each node encountered.
+    /// </summary>
+    /// <param name="start">The node from which the BFS will begin.</param>
+    void TraverseBfs(T start);
 
     /// <summary>
     /// Retrieves the set of values contained within the nodes of the graph.
@@ -31,5 +38,5 @@ public interface IGraph<T>
     /// This property returns an `ISet` containing the values of all nodes present in the graph's node collection.
     /// It provides a way to access all distinct node values in the graph.
     /// </remarks>
-    ISet<T> NodeValues { get; }
+    IReadOnlySet<T> NodeValues { get; }
 }
