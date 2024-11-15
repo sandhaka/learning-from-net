@@ -1,3 +1,4 @@
+using GraphSearch.Graph.Abstractions;
 using GraphSearch.Graph.NodeCollections.Abstractions;
 using Monads.Optional;
 
@@ -10,7 +11,10 @@ internal abstract class GraphBase<T> : IGraph<T>
     protected INodeCollection<T> NodesCollection;
 
     public IReadOnlySet<T> NodeValues => NodesCollection.Values;
+
     public Option<OnVisit<T>> OnVisitActionParameter { get; set; } = Option<OnVisit<T>>.None();
+
+    public IGraphSearch<T> ToSearchGraph() => new GraphSearch<T>(this);
 
     public void TraverseDfs(T start)
     {

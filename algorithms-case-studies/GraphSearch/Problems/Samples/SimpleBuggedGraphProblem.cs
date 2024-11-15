@@ -1,6 +1,6 @@
 using GraphSearch.Problems.Abstractions;
 
-namespace GraphSearch.Problems.Implementations;
+namespace GraphSearch.Problems.Samples;
 
 public class SimpleBuggedGraphProblem : IGraphProblem<string>
 {

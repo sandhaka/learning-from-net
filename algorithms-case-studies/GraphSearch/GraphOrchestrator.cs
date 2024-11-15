@@ -1,4 +1,5 @@
 using GraphSearch.Graph;
+using GraphSearch.Graph.Abstractions;
 using GraphSearch.Problems.Abstractions;
 
 namespace GraphSearch;

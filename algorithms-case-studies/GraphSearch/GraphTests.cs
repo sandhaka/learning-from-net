@@ -2,7 +2,7 @@ using System.Text;
 using Monads.Optional;
 using Xunit.Abstractions;
 using GraphSearch.Graph;
-using GraphSearch.Problems.Implementations;
+using GraphSearch.Problems.Samples;
 
 namespace GraphSearch;
 

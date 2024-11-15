@@ -1,6 +1,6 @@
 using Monads.Optional;
 
-namespace GraphSearch.Graph;
+namespace GraphSearch.Graph.Abstractions;
 
 /// <summary>
 /// Represents a generic graph interface.
@@ -39,4 +39,6 @@ public interface IGraph<T>
     /// It provides a way to access all distinct node values in the graph.
     /// </remarks>
     IReadOnlySet<T> NodeValues { get; }
+    
+    IGraphSearch<T> ToSearchGraph();
 }
