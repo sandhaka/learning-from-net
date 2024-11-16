@@ -1,6 +1,7 @@
+using GraphSearch.Graph.Architecture.Components;
 using GraphSearch.Graph.NodeCollections;
 
-namespace GraphSearch.Graph;
+namespace GraphSearch.Graph.Architecture.Implementations;
 
 internal sealed class ReadOnlyGraph<T> : GraphBase<T>
 {

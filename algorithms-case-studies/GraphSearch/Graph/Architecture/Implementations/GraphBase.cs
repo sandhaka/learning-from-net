@@ -1,10 +1,10 @@
 using GraphSearch.Graph.Abstractions;
+using GraphSearch.Graph.Architecture.Components;
 using GraphSearch.Graph.NodeCollections.Abstractions;
+using GraphSearch.Graph.Parameters;
 using Monads.Optional;
 
-namespace GraphSearch.Graph;
-
-public delegate void OnVisit<in T>(T node);
+namespace GraphSearch.Graph.Architecture.Implementations;
 
 internal abstract class GraphBase<T> : IGraph<T>
 {

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Monads.Optional;
 
-namespace GraphSearch.Graph;
+namespace GraphSearch.Graph.Architecture.Components;
 
 [DebuggerDisplay("{Value}")]
 internal record Node<T>(T Value)
@@ -15,8 +15,6 @@ internal record Node<T>(T Value)
             ? ValueOption<Memory<Edge<T>>>.None()
             : ValueOption<Memory<Edge<T>>>.Some(value);
     }
-    
-    public virtual bool IsEmpty => false;
     
     public bool HasNeighbors => !Neighbors.IsEmpty;
 }

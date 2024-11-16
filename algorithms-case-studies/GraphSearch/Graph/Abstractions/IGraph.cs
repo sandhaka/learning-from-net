@@ -1,3 +1,4 @@
+using GraphSearch.Graph.Parameters;
 using Monads.Optional;
 
 namespace GraphSearch.Graph.Abstractions;
@@ -39,6 +40,11 @@ public interface IGraph<T>
     /// It provides a way to access all distinct node values in the graph.
     /// </remarks>
     IReadOnlySet<T> NodeValues { get; }
-    
+
+    /// <summary>
+    /// Transforms the current graph instance into a graph search object.
+    /// This allows for advanced search operations on the graph.
+    /// </summary>
+    /// <returns>An <see cref="IGraphSearch{T}"/> instance that can be used to perform search operations on the graph.</returns>
     IGraphSearch<T> ToSearchGraph();
 }

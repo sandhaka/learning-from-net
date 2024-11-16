@@ -1,3 +1,5 @@
+using GraphSearch.Graph.Architecture.Components;
+
 namespace GraphSearch.Graph.NodeCollections.Abstractions;
 
 internal interface INodeCollection<T>

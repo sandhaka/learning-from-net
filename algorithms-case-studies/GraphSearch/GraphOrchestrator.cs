@@ -1,5 +1,6 @@
-using GraphSearch.Graph;
 using GraphSearch.Graph.Abstractions;
+using GraphSearch.Graph.Architecture.Components;
+using GraphSearch.Graph.Architecture.Implementations;
 using GraphSearch.Problems.Abstractions;
 
 namespace GraphSearch;

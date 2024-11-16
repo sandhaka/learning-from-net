@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using GraphSearch.Graph.Architecture.Components;
 using GraphSearch.Graph.NodeCollections.Abstractions;
 
 namespace GraphSearch.Graph.NodeCollections;
