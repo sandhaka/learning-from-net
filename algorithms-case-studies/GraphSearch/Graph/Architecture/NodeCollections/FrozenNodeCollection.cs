@@ -2,9 +2,9 @@ using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using GraphSearch.Graph.Architecture.Components;
-using GraphSearch.Graph.NodeCollections.Abstractions;
+using GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 
-namespace GraphSearch.Graph.NodeCollections;
+namespace GraphSearch.Graph.Architecture.NodeCollections;
 
 [DebuggerDisplay("{NodesCount} nodes")]
 internal sealed class FrozenNodeCollection<T> : INodeCollection<T>
@@ -18,10 +18,8 @@ internal sealed class FrozenNodeCollection<T> : INodeCollection<T>
     }
 
     public int NodesCount => _nodes.Count;
-    
     public bool Contains(T value) => _nodes.Any(node => node.Value.Equals(value));
-
     public Node<T> this[T value] => _nodes.Single(node => node.Value.Equals(value));
-    
     public IReadOnlySet<T> Values => _nodes.Select(n => n.Value).ToHashSet();
+    public IReadOnlySet<Node<T>> Nodes => _nodes;
 }

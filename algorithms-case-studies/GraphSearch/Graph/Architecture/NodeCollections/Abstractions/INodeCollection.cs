@@ -1,6 +1,6 @@
 using GraphSearch.Graph.Architecture.Components;
 
-namespace GraphSearch.Graph.NodeCollections.Abstractions;
+namespace GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 
 internal interface INodeCollection<T>
 {
@@ -8,4 +8,5 @@ internal interface INodeCollection<T>
     bool Contains(T value);
     Node<T> this[T value] { get; }
     IReadOnlySet<T> Values { get; }
+    IReadOnlySet<Node<T>> Nodes { get; }
 }

@@ -1,4 +1,4 @@
-namespace GraphSearch.Graph.NodeCollections.Abstractions;
+namespace GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 
 internal interface IMutableNodeCollection<T> : INodeCollection<T>
 {

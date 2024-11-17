@@ -1,6 +1,5 @@
 using System.Text;
 using GraphSearch.Graph.Parameters;
-using Monads.Optional;
 using Xunit.Abstractions;
 using GraphSearch.Problems.Samples;
 
@@ -56,7 +55,7 @@ public class GraphTests(ITestOutputHelper output)
         var problem = new SimpleGraphProblem();
         var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
 
-        graph.OnVisitActionParameter = Option<OnVisit<string>>.Some(value =>
+        graph.OnVisitActionParameter = new OnVisit<string>(value =>
         {
             _output.WriteLine($"Visiting {value}");
 
@@ -76,7 +75,7 @@ public class GraphTests(ITestOutputHelper output)
         var problem = new SimpleGraphProblem();
         var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
 
-        graph.OnVisitActionParameter = Option<OnVisit<string>>.Some(value =>
+        graph.OnVisitActionParameter = new OnVisit<string>(value =>
         {
             _output.WriteLine($"Visiting {value}");
 

@@ -1,7 +1,7 @@
 using GraphSearch.Graph.Parameters;
 using Monads.Optional;
 
-namespace GraphSearch.Graph.Abstractions;
+namespace GraphSearch.Graph;
 
 /// <summary>
 /// Represents a generic graph interface.

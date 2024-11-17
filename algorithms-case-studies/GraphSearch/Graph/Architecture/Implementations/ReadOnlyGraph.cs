@@ -1,5 +1,5 @@
 using GraphSearch.Graph.Architecture.Components;
-using GraphSearch.Graph.NodeCollections;
+using GraphSearch.Graph.Architecture.NodeCollections;
 
 namespace GraphSearch.Graph.Architecture.Implementations;
 

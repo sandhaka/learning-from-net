@@ -1,17 +1,17 @@
-using GraphSearch.Graph.Abstractions;
+using GraphSearch.Graph.Architecture.Abstractions;
 using GraphSearch.Graph.Architecture.Components;
-using GraphSearch.Graph.NodeCollections.Abstractions;
+using GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 using GraphSearch.Graph.Parameters;
 using Monads.Optional;
 
 namespace GraphSearch.Graph.Architecture.Implementations;
 
-internal abstract class GraphBase<T> : IGraph<T>
+internal abstract class GraphBase<T> : IGraph<T>, IGraphComponents<T>
 {
     protected INodeCollection<T> NodesCollection;
 
     public IReadOnlySet<T> NodeValues => NodesCollection.Values;
-
+    public IReadOnlySet<Node<T>> Nodes => NodesCollection.Nodes;
     public Option<OnVisit<T>> OnVisitActionParameter { get; set; } = Option<OnVisit<T>>.None();
 
     public IGraphSearch<T> ToSearchGraph() => new GraphSearch<T>(this);
