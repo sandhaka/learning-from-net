@@ -4,7 +4,7 @@ using Monads.Optional;
 namespace GraphSearch.Graph.Architecture.Components;
 
 [DebuggerDisplay("{Value}")]
-internal record Node<T>(T Value)
+internal record Node<T>(T Value) where T : IEquatable<T>
 {
     private ValueOption<Memory<Edge<T>>> _neighbors = ValueOption<Memory<Edge<T>>>.None();
     
@@ -17,4 +17,13 @@ internal record Node<T>(T Value)
     }
     
     public bool HasNeighbors => !Neighbors.IsEmpty;
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+
+    public virtual bool Equals(Node<T> other)
+    {
+        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other)) return false;
+        return Value.Equals(other.Value);
+    }
 }

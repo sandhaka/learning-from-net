@@ -7,7 +7,8 @@ using GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 namespace GraphSearch.Graph.Architecture.NodeCollections;
 
 [DebuggerDisplay("{NodesCount} nodes")]
-internal sealed class FrozenNodeCollection<T> : INodeCollection<T>
+internal sealed class FrozenNodeCollection<T> : INodeCollection<T> 
+    where T : IEquatable<T>
 {
     private readonly FrozenSet<Node<T>> _nodes;
     
@@ -21,5 +22,4 @@ internal sealed class FrozenNodeCollection<T> : INodeCollection<T>
     public bool Contains(T value) => _nodes.Any(node => node.Value.Equals(value));
     public Node<T> this[T value] => _nodes.Single(node => node.Value.Equals(value));
     public IReadOnlySet<T> Values => _nodes.Select(n => n.Value).ToHashSet();
-    public IReadOnlySet<Node<T>> Nodes => _nodes;
 }

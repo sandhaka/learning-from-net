@@ -6,7 +6,7 @@ using GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 namespace GraphSearch.Graph.Architecture.NodeCollections;
 
 [DebuggerDisplay("{NodesCount} nodes")]
-internal sealed class MutableNodeCollection<T> : IMutableNodeCollection<T>
+internal sealed class MutableNodeCollection<T> : IMutableNodeCollection<T> where T : IEquatable<T>
 {
     private readonly HashSet<Node<T>> _nodes;
     
@@ -30,5 +30,4 @@ internal sealed class MutableNodeCollection<T> : IMutableNodeCollection<T>
     public bool Contains(T value) => _nodes.Any(node => node.Value.Equals(value));
     public Node<T> this[T value] => _nodes.Single(node => node.Value.Equals(value));
     public IReadOnlySet<T> Values => _nodes.Select(n => n.Value).ToHashSet();
-    public IReadOnlySet<Node<T>> Nodes => _nodes;
 }

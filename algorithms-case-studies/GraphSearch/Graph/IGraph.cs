@@ -1,4 +1,5 @@
 using GraphSearch.Graph.Parameters;
+using GraphSearch.Graph.Search;
 using Monads.Optional;
 
 namespace GraphSearch.Graph;
@@ -42,9 +43,9 @@ public interface IGraph<T>
     IReadOnlySet<T> NodeValues { get; }
 
     /// <summary>
-    /// Transforms the current graph instance into a graph search object.
-    /// This allows for advanced search operations on the graph.
+    /// Transforms the current graph instance into a path search object.
+    /// This allows for path search operations on the graph.
     /// </summary>
-    /// <returns>An <see cref="IGraphSearch{T}"/> instance that can be used to perform search operations on the graph.</returns>
-    IGraphSearch<T> ToSearchGraph();
+    /// <returns>An <see cref="IPathSearch{T}"/> instance that can be used to perform path search operations on the graph.</returns>
+    IPathSearch<T> ToPathSearch();
 }

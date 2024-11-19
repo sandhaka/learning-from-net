@@ -2,19 +2,21 @@ using GraphSearch.Graph.Architecture.Abstractions;
 using GraphSearch.Graph.Architecture.Components;
 using GraphSearch.Graph.Architecture.NodeCollections.Abstractions;
 using GraphSearch.Graph.Parameters;
+using GraphSearch.Graph.Search;
 using Monads.Optional;
 
 namespace GraphSearch.Graph.Architecture.Implementations;
 
-internal abstract class GraphBase<T> : IGraph<T>, IGraphComponents<T>
+internal abstract class GraphBase<T> : IGraph<T>, IGraphComponents<T> 
+    where T : IEquatable<T>
 {
     protected INodeCollection<T> NodesCollection;
 
     public IReadOnlySet<T> NodeValues => NodesCollection.Values;
-    public IReadOnlySet<Node<T>> Nodes => NodesCollection.Nodes;
+    public Node<T> this[T value] => NodesCollection[value];
     public Option<OnVisit<T>> OnVisitActionParameter { get; set; } = Option<OnVisit<T>>.None();
 
-    public IGraphSearch<T> ToSearchGraph() => new GraphSearch<T>(this);
+    public IPathSearch<T> ToPathSearch() => new PathSearch<T>(this);
 
     public void TraverseDfs(T start)
     {

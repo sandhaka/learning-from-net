@@ -3,7 +3,8 @@ using GraphSearch.Graph.Architecture.NodeCollections;
 
 namespace GraphSearch.Graph.Architecture.Implementations;
 
-internal sealed class ReadOnlyGraph<T> : GraphBase<T>
+internal sealed class ReadOnlyGraph<T> : GraphBase<T> 
+    where T : IEquatable<T>
 {
     private ReadOnlyGraph(IEnumerable<Node<T>> nodes)
     {

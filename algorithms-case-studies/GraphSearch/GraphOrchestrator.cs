@@ -9,7 +9,7 @@ namespace GraphSearch;
 /// Orchestrates the creation of graph structures.
 /// </summary>
 /// <typeparam name="T">The type of the nodes in the graph.</typeparam>
-public static class GraphOrchestrator<T>
+public static class GraphOrchestrator<T> where T : IEquatable<T>
 {
     /// <summary>
     /// Creates a read-only graph from the given problem.

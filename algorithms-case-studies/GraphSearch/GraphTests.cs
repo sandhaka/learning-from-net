@@ -1,11 +1,12 @@
 using System.Text;
 using GraphSearch.Graph.Parameters;
+using GraphSearch.Graph.Search;
 using Xunit.Abstractions;
 using GraphSearch.Problems.Samples;
 
 namespace GraphSearch;
 
-internal class CustomTestOutputHelper(ITestOutputHelper output) : ITestOutputHelper
+internal class VerifiableTestOutputHelper(ITestOutputHelper output) : ITestOutputHelper
 {
     private readonly StringBuilder _stringBuilder = new();
 
@@ -29,7 +30,7 @@ internal class CustomTestOutputHelper(ITestOutputHelper output) : ITestOutputHel
 
 public class GraphTests(ITestOutputHelper output)
 {
-    private readonly CustomTestOutputHelper _output = new(output);
+    private readonly VerifiableTestOutputHelper _output = new(output);
 
     [Fact(DisplayName = "Should build a read only graph from a encoded problem.")]
     public void ShouldBuildReadOnlyGraph()
@@ -63,6 +64,7 @@ public class GraphTests(ITestOutputHelper output)
                 _output.WriteLine("I'm reached M!");
         });
 
+        // Act
         graph.TraverseDfs("A");
 
         // Verify
@@ -83,9 +85,79 @@ public class GraphTests(ITestOutputHelper output)
                 _output.WriteLine("I'm reached M!");
         });
 
+        // Act
         graph.TraverseBfs("A");
 
         // Verify
         Assert.Contains("I'm reached M!", _output.GetOutput());
+    }
+    
+    [Fact]
+    public void ShouldSearchShortestPathWithDijkstra()
+    {
+        var problem = new PathProblem();
+        var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
+        var pathSearch = graph.ToPathSearch();
+        var searchStrategy = pathSearch.GraphSearchStrategy;
+        
+        output.WriteLine($"Using {searchStrategy.Name} search strategy.");
+        
+        // Act
+        var s = pathSearch.Search("A", "Z", out var result);
+
+        var reducedResult = result.Reduce(new SearchResult<string>() { Path = new List<string>(), TotalCost = 0 });
+        var resultPath = string.Join(',', reducedResult.Path);
+        
+        output.WriteLine($"Reached {resultPath} with cost {reducedResult.TotalCost}");
+        
+        // Verify
+        Assert.True(s);
+        Assert.Equal("A,B,H,K,Z", resultPath);
+        Assert.Equal(12, reducedResult.TotalCost);
+    }
+    
+    [Fact]
+    public void ShouldSearchShortestPathWithDijkstraEdgeCaseStartIsTarget()
+    {
+        var problem = new PathProblem();
+        var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
+        var pathSearch = graph.ToPathSearch();
+        var searchStrategy = pathSearch.GraphSearchStrategy;
+        
+        output.WriteLine($"Using {searchStrategy.Name} search strategy.");
+        
+        // Act
+        var s = pathSearch.Search("A", "A", out var result);
+
+        var reducedResult = result.Reduce(new SearchResult<string>() { Path = new List<string>(), TotalCost = 0 });
+        var resultPath = string.Join(',', reducedResult.Path);
+        
+        output.WriteLine($"Reached {resultPath} with cost {reducedResult.TotalCost}");
+        
+        // Verify
+        Assert.True(s);
+        Assert.Equal("A", resultPath);
+        Assert.Equal(0, reducedResult.TotalCost);
+    }
+    
+    [Fact]
+    public void ShouldSearchShortestPathWithDijkstraTargetNotExists()
+    {
+        var problem = new PathProblem();
+        var graph = GraphOrchestrator<string>.CreateReadOnly(problem);
+        var pathSearch = graph.ToPathSearch();
+        var searchStrategy = pathSearch.GraphSearchStrategy;
+        
+        output.WriteLine($"Using {searchStrategy.Name} search strategy.");
+        
+        // Act
+        var s = pathSearch.Search("A", "U", out var result);
+
+        var reducedResult = result.Reduce(new SearchResult<string>() { Path = new List<string>(), TotalCost = 0 });
+        var resultPath = string.Join(',', reducedResult.Path);
+        
+        // Verify
+        Assert.False(s);
+        Assert.True(string.IsNullOrEmpty(resultPath));
     }
 }
