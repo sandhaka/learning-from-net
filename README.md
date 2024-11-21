@@ -25,7 +25,6 @@ Learn from .NET
 #### Algorithms Case Studies
 
 - [x] [Speed up Merge Sort](./algorithms-case-studies/Sorting/MergeSort.cs)
-- [ ] [Making Graph traversal generic](./algorithms-case-studies/GraphSearch)
 
 #### Miscellaneous
 

@@ -32,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrozenCollectionsBmk", "ben
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "algorithms-case-studies\Sorting\Sorting.csproj", "{6246427C-EEAE-4648-80D9-6C2753307421}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSearch", "algorithms-case-studies\GraphSearch\GraphSearch.csproj", "{43B6CF8C-D557-4721-8303-E6B0C1882AC9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,9 +102,5 @@ Global
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43B6CF8C-D557-4721-8303-E6B0C1882AC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43B6CF8C-D557-4721-8303-E6B0C1882AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43B6CF8C-D557-4721-8303-E6B0C1882AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43B6CF8C-D557-4721-8303-E6B0C1882AC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
