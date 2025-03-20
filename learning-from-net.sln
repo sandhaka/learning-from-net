@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneratorTarget", "source-generators\SourceGeneratorTarget\SourceGeneratorTarget.csproj", "{7E564241-B4E9-449B-8FC6-2341E1DC280D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneratorSample", "source-generators\SourceGeneratorSample\SourceGeneratorSample.csproj", "{7FADC305-85B8-4CF6-928B-90A636642BEA}"
@@ -31,6 +34,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrozenCollectionsBmk", "benchmarks\FrozenCollectionsBmk\FrozenCollectionsBmk.csproj", "{5EC25A5D-C8A1-46F0-861F-CE70DE145C28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "algorithms-case-studies\Sorting\Sorting.csproj", "{6246427C-EEAE-4648-80D9-6C2753307421}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentCache", "miscellaneous\TransparentCache\TransparentCache.csproj", "{65A11731-CEA9-4E0E-9988-9BE4D7376142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentCacheBmk", "benchmarks\TransparentCacheBmk\TransparentCacheBmk.csproj", "{047E2ECA-979A-40A3-8D88-0AA343B60778}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,5 +109,19 @@ Global
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6246427C-EEAE-4648-80D9-6C2753307421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65A11731-CEA9-4E0E-9988-9BE4D7376142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A11731-CEA9-4E0E-9988-9BE4D7376142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65A11731-CEA9-4E0E-9988-9BE4D7376142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A11731-CEA9-4E0E-9988-9BE4D7376142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4138F849-F1B3-443B-A05A-8B749D76A545}
 	EndGlobalSection
 EndGlobal

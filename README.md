@@ -31,5 +31,6 @@ Learn from .NET
 - [x] [Trace test](./miscellaneous/TraceTesting)
 - [x] [gZipStream usage](./miscellaneous/CompressionSample)
 - [ ] [C# Language features samples](./miscellaneous/LangFeaturesSamples)
+- [x] [Generic caching](./miscellaneous/TransparentCache)
 
 </samp>
