@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentCache", "miscell
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentCacheBmk", "benchmarks\TransparentCacheBmk\TransparentCacheBmk.csproj", "{047E2ECA-979A-40A3-8D88-0AA343B60778}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowSample", "algorithms-case-studies\Patterns\SlidingWindowSample\SlidingWindowSample.csproj", "{F7E0DC79-0F3D-43DE-A1C6-0FF8D5341F98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{047E2ECA-979A-40A3-8D88-0AA343B60778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7E0DC79-0F3D-43DE-A1C6-0FF8D5341F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7E0DC79-0F3D-43DE-A1C6-0FF8D5341F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7E0DC79-0F3D-43DE-A1C6-0FF8D5341F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7E0DC79-0F3D-43DE-A1C6-0FF8D5341F98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
