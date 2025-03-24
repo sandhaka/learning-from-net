@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SlidingWindowSample.SW
+﻿namespace SlidingWindowSample.SW
 {
     public static class SlidingWindowFactory
     {
-        public static ISlidingWindow Create()
+        public static ISlidingWindow<T> Create<T>()
         {
             throw new NotImplementedException();
         }

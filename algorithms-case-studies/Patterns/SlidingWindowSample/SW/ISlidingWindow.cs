@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SlidingWindowSample.SW
+﻿namespace SlidingWindowSample.SW
 {
-    public interface ISlidingWindow
+    public interface ISlidingWindow<T>
     {
+        public T Head { get; }
+        public T Tail { get; }
+        public int Count { get; }
+        public Func<T, T, bool> RemoveHead { get; }
     }
 }
