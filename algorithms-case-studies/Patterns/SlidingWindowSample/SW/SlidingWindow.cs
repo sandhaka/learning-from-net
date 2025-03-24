@@ -1,4 +1,10 @@
-﻿namespace SlidingWindowSample.SW
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SlidingWindowSample.SW
 {
     internal class SlidingWindow
     {
