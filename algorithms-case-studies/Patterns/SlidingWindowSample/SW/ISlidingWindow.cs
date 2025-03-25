@@ -4,7 +4,9 @@
     {
         public T Head { get; }
         public T Tail { get; }
-        public int Count { get; }
-        public Func<T, T, bool> RemoveHead { get; }
+        public int Length { get; }
+        public Func<T, T, bool> RemoveHeadPredicate { get; }
+        public void Advance(int count);
+        public void FallBack(int count);
     }
 }
