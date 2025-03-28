@@ -18,29 +18,39 @@ namespace SlidingWindowTests
             Assert.Equal(10, sw.Length);
         }
 
-        public void ShouldMoveWindowByForwardAndBackward()
+        [Fact]
+        public void ShouldMoveWindowForwardAndBackward()
         {
             const int dimension = 100;
-            var testSeq = Enumerable.Range(0, dimension).ToArray();
-            var sw = SlidingWindowFactory.Create(testSeq, 0, 10);
+            const int windowSize = 10;
 
-            for (var i = 0; i < dimension - 10; i++)
+            var testSeq = Enumerable.Range(0, dimension).ToArray();
+            var sw = SlidingWindowFactory.Create(testSeq, 0, windowSize);
+
+            for (var i = 1; i <= dimension - windowSize; i++)
             {
                 sw.Advance(1);
 
                 Assert.Equal(9 + i, sw.Head);
                 Assert.Equal(0 + i, sw.Tail);
+                Assert.Equal(windowSize, sw.Length);
             }
 
-            Assert.Equal(dimension - 1, sw.Head);
+            Assert.Equal(testSeq[90], sw.Tail);
+            Assert.Equal(testSeq[99], sw.Head);
 
-            for (var i = dimension - 1; i >= 0; i--)
+            for (var i = dimension - 1; i >= windowSize; i--)
             {
                 sw.FallBack(1);
 
-                Assert.Equal(9 + i, sw.Head);
-                Assert.Equal(0 + i, sw.Tail);
+                Assert.Equal(i - 1, sw.Head);
+                Assert.Equal(i - windowSize, sw.Tail);
+                Assert.Equal(windowSize, sw.Length);
             }
+
+            Assert.Equal(testSeq[0], sw.Tail);
+            Assert.Equal(testSeq[9], sw.Head);
+            Assert.Equal(windowSize, sw.Length);
         }
     }
 }
