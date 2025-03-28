@@ -1,17 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SlidingWindowSample.SW
+﻿namespace SlidingWindowSample.SW
 {
-    internal class QueueSlidingWindow<T> : ISlidingWindow<T>
+    internal class QueueSlidingWindow<T> : ISlidingWindow<T>, IDisposable
     {
-        public T Head { get; }
-        public T Tail { get; }
-        public int Length { get; }
-        public Func<T, T, bool> RemoveHeadPredicate { get; }
+        private readonly IEnumerator<T> _seqEnumerator;
+        private readonly Queue<T> _queue = new Queue<T>();
+
+        internal QueueSlidingWindow(IEnumerable<T> enumerable)
+        {
+            _seqEnumerator = enumerable.GetEnumerator();
+        }
+
+        internal QueueSlidingWindow(IEnumerable<T> enumerable, int start, int length = 1)
+        {
+            _seqEnumerator = enumerable.GetEnumerator();
+        }
+
+        public T Head => _queue.Peek();
+        
+        public T Tail => _queue.Last();
+        
+        public int Length => _queue.Count;
+
+        public Func<T, T, bool> RemoveHeadPredicate => throw new NotImplementedException();
+
         public void Advance(int count)
         {
             throw new NotImplementedException();
@@ -20,6 +31,11 @@ namespace SlidingWindowSample.SW
         public void FallBack(int count)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            _seqEnumerator.Dispose();
         }
     }
 }

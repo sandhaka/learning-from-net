@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics.Contracts;
-using System.Diagnostics.Metrics;
+﻿using System.Diagnostics.Contracts;
 
 namespace SlidingWindowSample.SW
 {
