@@ -1,4 +1,4 @@
-﻿namespace SlidingWindowSample.SW
+﻿namespace SlidingWindowSample.SW.Implementations
 {
     internal class QueueSlidingWindow<T> : ISlidingWindow<T>, IDisposable
     {
@@ -29,6 +29,11 @@
         }
 
         public void FallBack(int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAccumulator(IAccumulator<T> accumulator)
         {
             throw new NotImplementedException();
         }

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace SlidingWindowSample.SW
+namespace SlidingWindowSample.SW.Implementations
 {
     internal class MemoryViewSlidingWindow<T> : ISlidingWindow<T>
     {
@@ -15,7 +15,10 @@ namespace SlidingWindowSample.SW
         private int _tailIndex;
         private int _headIndex;
 
-        internal MemoryViewSlidingWindow(IEnumerable<T> sequence)
+        // Accumulators
+        private readonly HashSet<IAccumulator<T>> _accumulators = [];
+
+        internal MemoryViewSlidingWindow(T[] sequence)
         {
             _sequence = sequence.ToArray();
             _sequenceMemoryView = _sequence;
@@ -67,6 +70,13 @@ namespace SlidingWindowSample.SW
             _window = Update();
         }
 
+        public void AddAccumulator(IAccumulator<T> accumulator)
+        {
+            Contract.Assume(accumulator != null);
+
+            _accumulators.Add(accumulator);
+        }
+
         private Memory<T> Init(int start = 0, int length = 1)
         {
             Contract.Assume(_sequenceMemoryView.Length > 0);
@@ -83,6 +93,11 @@ namespace SlidingWindowSample.SW
         {
             if (_tailIndex < 0 || _headIndex < _tailIndex || _headIndex >= _sequenceMemoryView.Length)
                 throw new InvalidOperationException("Wrong slice parameters");
+
+            var span = _sequenceMemoryView.Span[_tailIndex..(_headIndex + 1)];
+            foreach (var accumulator in _accumulators)
+                accumulator.Process(span);
+
             return _sequenceMemoryView.Slice(_tailIndex, _headIndex - _tailIndex + 1);
         }
     }

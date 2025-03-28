@@ -1,5 +1,6 @@
 using SlidingWindowSample.Data;
 using SlidingWindowSample.SW;
+using SlidingWindowTests.Accumulators;
 
 namespace SlidingWindowTests
 {
@@ -74,6 +75,8 @@ namespace SlidingWindowTests
 
             // Implicit create a window by one element
             var sw = SlidingWindowFactory.Create(tasksList);
+
+            sw.AddAccumulator(new WorkTasksAccumulator());
 
             Assert.Equal(tasksList[0], sw.Head);
             Assert.Equal(tasksList[0], sw.Tail);

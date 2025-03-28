@@ -8,5 +8,6 @@
         public Func<T, T, bool> RemoveHeadPredicate { get; }
         public void Advance(int count);
         public void FallBack(int count);
+        public void AddAccumulator(IAccumulator<T> accumulator);
     }
 }
