@@ -1,6 +1,6 @@
-using SlidingWindowSample.Data;
 using SlidingWindowSample.SW;
 using SlidingWindowTests.Accumulators;
+using SlidingWindowTests.Data;
 
 namespace SlidingWindowTests
 {
@@ -11,7 +11,6 @@ namespace SlidingWindowTests
         {
             var testSeq = Enumerable.Range(0, 11).ToArray();
 
-            // Act
             var sw = SlidingWindowFactory.Create(testSeq, 0, 10);
 
             Assert.NotNull(sw);
@@ -72,11 +71,12 @@ namespace SlidingWindowTests
         {
             var tasksEnumerable = Generator.SampleWorkTasks(1000);
             var tasksList = tasksEnumerable.ToArray();
+            var accumulator = new WorkTasksAccumulator();
 
             // Implicit create a window by one element
             var sw = SlidingWindowFactory.Create(tasksList);
 
-            sw.AddAccumulator(new WorkTasksAccumulator());
+            sw.AddAccumulator(accumulator);
 
             Assert.Equal(tasksList[0], sw.Head);
             Assert.Equal(tasksList[0], sw.Tail);
@@ -88,7 +88,30 @@ namespace SlidingWindowTests
             Assert.Equal(tasksList[100], sw.Tail);
 
             // Accumulator should work on 1 item window
-            var totalWorkData = tasksList.Take(100).Aggregate((wia, wib) => 
+            var workData = tasksList[100];
+            var accWValue = accumulator.Value;
+            Assert.Equal(workData.Effort, accWValue.Effort);
+            Assert.Equal(workData.Deviation, accWValue.Deviation);
+            Assert.Equal(workData.Value, accWValue.Value);
+        }
+
+        [Fact]
+        public void ShouldSlideOnListOfWorkTasks()
+        {
+            var tasksList = Generator.SampleWorkTasks(1000).ToArray();
+            var accumulator = new WorkTasksAccumulator();
+            var sw = SlidingWindowFactory.Create(tasksList, 0, 400);
+            sw.AddAccumulator(accumulator);
+
+            Assert.Equal(tasksList[399], sw.Head);
+            Assert.Equal(tasksList[0], sw.Tail);
+
+            sw.Advance(100);
+
+            Assert.Equal(tasksList[499], sw.Head); // 500th item
+            Assert.Equal(tasksList[100], sw.Tail); // 101th item
+
+            var totalWorkData = tasksList.Skip(100).Take(400).Aggregate((wia, wib) => 
                 new WorkTask
                 {
                     Effort = wia.Effort + wib.Effort, 
@@ -96,7 +119,10 @@ namespace SlidingWindowTests
                     Value = wia.Value + wib.Value
                 });
 
-            // TODO: test accumulators here
+            var accWValue = accumulator.Value;
+            Assert.Equal(totalWorkData.Effort, accWValue.Effort);
+            Assert.Equal(totalWorkData.Deviation, accWValue.Deviation);
+            Assert.Equal(totalWorkData.Value, accWValue.Value);
         }
     }
 }

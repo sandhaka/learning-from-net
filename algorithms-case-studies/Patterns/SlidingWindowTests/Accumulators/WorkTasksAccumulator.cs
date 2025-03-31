@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SlidingWindowSample.Data;
 using SlidingWindowSample.SW;
+using SlidingWindowTests.Data;
 
 namespace SlidingWindowTests.Accumulators
 {

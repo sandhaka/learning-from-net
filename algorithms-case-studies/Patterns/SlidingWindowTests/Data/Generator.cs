@@ -1,8 +1,8 @@
-﻿namespace SlidingWindowSample.Data
+﻿namespace SlidingWindowTests.Data
 {
     public static class Generator
     {
-        public static IEnumerable<WorkTask> SampleWorkTasks(int n)
+        public static IEnumerable<SlidingWindowTests.Data.WorkTask> SampleWorkTasks(int n)
         {
             var rand = new Random();
 
@@ -16,7 +16,7 @@
                 var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
                 var stdDev = Math.Abs(effort * randStdNormal);
 
-                yield return new WorkTask(effort, stdDev, value);
+                yield return new SlidingWindowTests.Data.WorkTask(effort, stdDev, value);
             }
         }
     }

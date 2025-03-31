@@ -1,4 +1,4 @@
-﻿namespace SlidingWindowSample.Data
+﻿namespace SlidingWindowTests.Data
 {
     /// <summary>
     /// Work Assessment data
