@@ -43,14 +43,6 @@ namespace SlidingWindowTests.Accumulators
 
         public WorkTask Value { get; private set; } = WorkTask.Empty;
 
-        public void Process(Span<WorkTask> currentWindow)
-        {
-            var enumerator = currentWindow.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var task = enumerator.Current;
-                Value += task;
-            }
-        }
+        public void Process(WorkTask current) => Value += current;
     }
 }

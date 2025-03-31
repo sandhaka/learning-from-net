@@ -15,7 +15,6 @@ namespace SlidingWindowSample.SW.Implementations
         private int _tailIndex;
         private int _headIndex;
 
-        // Accumulators
         private readonly HashSet<IAccumulator<T>> _accumulators = [];
 
         internal MemoryViewSlidingWindow(T[] sequence)
@@ -95,8 +94,10 @@ namespace SlidingWindowSample.SW.Implementations
                 throw new InvalidOperationException("Wrong slice parameters");
 
             var span = _sequenceMemoryView.Span[_tailIndex..(_headIndex + 1)];
+
             foreach (var accumulator in _accumulators)
-                accumulator.Process(span);
+                foreach (var item in span)
+                    accumulator.Process(item);
 
             return _sequenceMemoryView.Slice(_tailIndex, _headIndex - _tailIndex + 1);
         }

@@ -9,6 +9,6 @@ namespace SlidingWindowSample.SW
     public interface IAccumulator<T> : IComparable, IEquatable<IAccumulator<T>>
     {
         T Value { get; }
-        void Process(Span<T> currentWindow);
+        void Process(T current);
     }
 }
