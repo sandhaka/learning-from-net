@@ -10,20 +10,25 @@ namespace SlidingWindowSample.SW.Implementations
 
         private readonly HashSet<IAccumulator<T>> _accumulators = [];
 
-        internal QueueSlidingWindow(IEnumerable<T> enumerable)
+        internal QueueSlidingWindow(IEnumerable<T> enumerable, int start = 0, int length = 1)
         {
-            _seqEnumerator = enumerable.GetEnumerator();
+            if (length <= 0) throw new InvalidOperationException();
+
+            _seqEnumerator = enumerable.Skip(start).GetEnumerator();
+            for (var i = 0; i < length; i++)
+            {
+                if (_seqEnumerator.MoveNext() is false)
+                    throw new InvalidOperationException();
+
+                _queue.Enqueue(_seqEnumerator.Current);
+                _lastAppended = _seqEnumerator.Current;
+            }
         }
 
-        internal QueueSlidingWindow(IEnumerable<T> enumerable, int start, int length = 1)
-        {
-            _seqEnumerator = enumerable.GetEnumerator();
-        }
+        public T Head => _queue.Last();
+        
+        public T Tail => _queue.Peek();
 
-        public T Head => _queue.Peek();
-        
-        public T Tail => _queue.Last();
-        
         public int Length => _queue.Count;
 
         public Func<T, T, bool> RemoveHeadPredicate => throw new NotImplementedException();
@@ -39,6 +44,13 @@ namespace SlidingWindowSample.SW.Implementations
 
                 _queue.Enqueue(_seqEnumerator.Current);
                 _lastAppended = _seqEnumerator.Current;
+                _queue.Dequeue();
+            }
+
+            foreach (var accumulator in _accumulators)
+            {
+                foreach (var item in _queue)
+                    accumulator.Process(item);
             }
         }
 

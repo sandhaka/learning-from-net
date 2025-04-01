@@ -96,8 +96,10 @@ namespace SlidingWindowSample.SW.Implementations
             var span = _sequenceMemoryView.Span[_tailIndex..(_headIndex + 1)];
 
             foreach (var accumulator in _accumulators)
+            {
                 foreach (var item in span)
                     accumulator.Process(item);
+            }
 
             return _sequenceMemoryView.Slice(_tailIndex, _headIndex - _tailIndex + 1);
         }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SlidingWindowSample.SW;
+﻿using SlidingWindowSample.SW;
 using SlidingWindowTests.Data;
 
 namespace SlidingWindowTests.Accumulators
