@@ -25,6 +25,7 @@ Learn from .NET
 #### Algorithms Case Studies
 
 - [x] [Speed up Merge Sort](./algorithms-case-studies/Sorting/MergeSort.cs)
+- [x] [Sliding Window Pattern](./algorithms-case-studies/Patterns/SlidingWindowSample)
 
 #### Miscellaneous
 
