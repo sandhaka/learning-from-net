@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowSample", "algo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowTests", "algorithms-case-studies\Patterns\SlidingWindowTests\SlidingWindowTests.csproj", "{6F87B903-6B2F-4681-AC9F-E528B5BD0271}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowBmk", "benchmarks\SlidingWindowBmk\SlidingWindowBmk.csproj", "{E4F50009-C4F3-45DB-AC76-06E51E20B51A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{6F87B903-6B2F-4681-AC9F-E528B5BD0271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F87B903-6B2F-4681-AC9F-E528B5BD0271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F87B903-6B2F-4681-AC9F-E528B5BD0271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
