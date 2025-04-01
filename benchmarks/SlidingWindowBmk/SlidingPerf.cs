@@ -9,10 +9,10 @@ namespace SlidingWindowBmk
     public class SlidingPerf
     {
         [Params(10, 100)] public int WindowSize { get; set; }
-        [Params(100000, 1000000)] public int Length { get; set; }
+        [Params(10000000)] public int Length { get; set; }
 
-        private readonly IEnumerable<int> _enumerable = Enumerable.Range(0, 1000001);
-        private readonly int[] _arr = Enumerable.Range(0, 1000000).ToArray();
+        private readonly IEnumerable<int> _enumerable = Enumerable.Range(0, 10000000);
+        private readonly int[] _arr = Enumerable.Range(0, 10000000).ToArray();
         private readonly IAccumulator<int> _accumulator = new SimpleAccumulator();
 
         private ISlidingWindow<int> _memorySlidingWindow;
