@@ -34,8 +34,8 @@ namespace SlidingWindowSample.SW.Implementations
         public Func<T, T, bool> RemoveHeadPredicate => throw new NotImplementedException();
 
         public void Advance(int count)
-        {
-            Contract.Assume(count > 0);
+        { 
+            Contract.Requires(count > 0);
 
             for (var i = 0; i < count; i++)
             {
@@ -59,9 +59,11 @@ namespace SlidingWindowSample.SW.Implementations
 
         public void AddAccumulator(IAccumulator<T> accumulator)
         {
-            Contract.Assume(accumulator != null);
+            if (accumulator is null) 
+                throw new ArgumentNullException(nameof(accumulator));
 
-            _accumulators.Add(accumulator);
+            if (!_accumulators.Add(accumulator))
+                throw new ArgumentException($"Accumulator {nameof(accumulator)} just present");
         }
 
         public void Dispose()

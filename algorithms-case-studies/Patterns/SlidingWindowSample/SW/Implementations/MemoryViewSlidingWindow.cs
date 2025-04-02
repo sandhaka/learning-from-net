@@ -45,7 +45,7 @@ namespace SlidingWindowSample.SW.Implementations
 
         public void Advance(int count)
         {
-            Contract.Assume(count > 0);
+            Contract.Requires(count > 0);
 
             if (_headIndex + count >= _sequenceMemoryView.Length) 
                 throw new InvalidOperationException();
@@ -58,7 +58,7 @@ namespace SlidingWindowSample.SW.Implementations
 
         public void FallBack(int count)
         {
-            Contract.Assume(count > 0);
+            Contract.Requires(count > 0);
 
             if (_tailIndex - count < 0)
                 throw new InvalidOperationException();
@@ -71,16 +71,19 @@ namespace SlidingWindowSample.SW.Implementations
 
         public void AddAccumulator(IAccumulator<T> accumulator)
         {
-            Contract.Assume(accumulator != null);
+            if (accumulator is null)
+                throw new ArgumentNullException(nameof(accumulator));
 
-            _accumulators.Add(accumulator);
+            if (!_accumulators.Add(accumulator))
+                throw new ArgumentException($"Accumulator {nameof(accumulator)} just present");
         }
 
         private Memory<T> Init(int start = 0, int length = 1)
         {
+            Contract.Requires(start >= 0);
+            Contract.Requires(length > 0);
+
             Contract.Assume(_sequenceMemoryView.Length > 0);
-            Contract.Assume(start >= 0);
-            Contract.Assume(length > 0);
 
             _tailIndex = start;
             _headIndex = start + length - 1;
