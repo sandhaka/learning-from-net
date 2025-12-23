@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowTests", "algor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlidingWindowBmk", "benchmarks\SlidingWindowBmk\SlidingWindowBmk.csproj", "{E4F50009-C4F3-45DB-AC76-06E51E20B51A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmutableObjectsReferencesSamples", "ImmutableObjectsReferencesSamples\ImmutableObjectsReferencesSamples.csproj", "{A23C3F2A-728F-4BE5-B966-3219DDCB4693}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4F50009-C4F3-45DB-AC76-06E51E20B51A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23C3F2A-728F-4BE5-B966-3219DDCB4693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23C3F2A-728F-4BE5-B966-3219DDCB4693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23C3F2A-728F-4BE5-B966-3219DDCB4693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23C3F2A-728F-4BE5-B966-3219DDCB4693}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
