@@ -9,6 +9,8 @@ Learn from .NET
 - [x] [Collections](./benchmarks/FrozenCollectionsBmk) 
 - [x] [Execution on Stack](./benchmarks/StackExecutingBmk)
 - [x] [Allocations](./benchmarks/StackAlloc)
+- [x] [GetHashCode](./benchmarks/GetHashCodeBmk)
+- [x] [Delegate invocation](./benchmarks/ActionMethodsBmk)
 
 #### OOP
 
