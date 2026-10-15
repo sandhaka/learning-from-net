@@ -29,6 +29,10 @@ Learn from .NET
 - [x] [Speed up Merge Sort](./algorithms-case-studies/Sorting/MergeSort.cs)
 - [x] [Sliding Window Pattern](./algorithms-case-studies/Patterns/SlidingWindowSample)
 
+#### Low-Level
+
+- [x] [.NET Memory Model: Concurrency](./low-level/net-memory-model-demo/Program.cs)
+
 #### Miscellaneous
 
 - [x] [Trace test](./miscellaneous/TraceTesting)

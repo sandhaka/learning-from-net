@@ -130,7 +130,7 @@ internal static class Program
 {
 	private static void Main()
 	{
-		//StoreBufferingDemo.Run(1_000_000);
+		StoreBufferingDemo.Run(1_000_000);
 		LoopHoistingDemo.Run();
 	}
 }
