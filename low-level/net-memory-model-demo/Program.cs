@@ -47,8 +47,24 @@
 //    - x64: every ordinary mov already has acquire/release behavior, so volatile emits the SAME
 //      instructions as plain code. Here volatile only restricts the JIT: no keeping the value in a
 //      register, no removing the access, no moving it across other accesses.
-//    - ARM64: volatile emits real instructions (ldar / stlr / dmb) that constrain the CPU.
+//    - ARM64: volatile emits real instructions that constrain the CPU:
+//        ldar   load-acquire. Volatile.Read; later accesses cannot become visible before it.
+//        ldapr  weaker load-acquire, used instead of ldar when the CPU supports it (ARMv8.3+).
+//               Same guarantee for later accesses, but it does not wait for an earlier stlr.
+//        stlr   store-release. Volatile.Write; earlier accesses become visible before it.
+//        dmb    data memory barrier, a full fence (Interlocked.MemoryBarrier).
 //    - So volatile does NOT make the core wait for its store buffer to drain.
+//    - In IL, volatile is only a marker for the JIT; IL itself has no notion of reordering:
+//
+//        C#                          IL
+//        _stop                       ldsfld   bool _stop
+//        volatile field _stop        volatile. ldsfld bool modreq(IsVolatile) _stop
+//        Volatile.Read(ref _stop)    ldsflda  bool _stop
+//                                    call     bool Volatile::Read(bool&)    // JIT intrinsic
+//
+//      The IL keeps every access in program order. All the reordering discussed here happens
+//      later, when the JIT turns IL into machine code (compiled order), or in the CPU (visibility
+//      order). That is why the demos below show the x64 code, not just the IL.
 //
 // 5. Full fence
 //
@@ -56,7 +72,31 @@
 //    - x64: compiles to "lock or dword ptr [rsp], 0". The core cannot run any later load until its
 //      store buffer has drained into the (coherent) cache. That rules out store -> load reordering.
 //
-// 6. Summary
+// 6. Reading the listings in Part 2
+//
+//    IL is stack based: instructions push values onto an evaluation stack and pop them.
+//        ldc.i4.1         push the int constant 1 (ldc.i4.0 pushes 0)
+//        ldsfld  / stsfld push the value of a static field / pop a value into it
+//        ldsflda          push the ADDRESS of a static field (a "ref" argument)
+//        ldloc.0/stloc.0  push / pop local variable 0
+//        conv.i8          convert the top of the stack to a 64-bit integer (long)
+//        call             call a method, arguments taken from the stack
+//        br.s, brfalse.s  jump always / jump if the top of the stack is false (0)
+//        volatile.        prefix: the next field access is volatile
+//
+//    x64 operates on registers (eax, ecx, ...) and memory; [_x] means "the memory at _x".
+//        mov  a, b        copy b into a (a load if b is memory, a store if a is memory)
+//        movzx a, b       load a byte and zero-extend it into a register
+//        cmp / test       compare two values / AND them, setting flags without storing a result
+//        je / jne / jmp   jump if equal (zero) / if not equal / always
+//        lock or [rsp],0  "lock" makes the instruction a full fence; "or ...,0" changes nothing.
+//                         Its only purpose is the fence.
+//
+//    Tier0 / Tier1 / OSR: .NET first compiles a method quickly without optimizations (Tier0),
+//    then recompiles hot code with optimizations (Tier1). OSR (on-stack replacement) switches a
+//    loop that is already running to the Tier1 version. The listings show Tier1 code.
+//
+// 7. Summary
 //
 //    Demo                Who reorders               Where                       Fix
 //    StoreBufferingDemo  CPU                        store buffer -> cache       full fence
@@ -79,9 +119,38 @@
 // In program order, whichever load runs last comes after both stores, so it reads 1.
 // _r1 == 0 && _r2 == 0 should therefore be impossible.
 //
-// Neither the JIT nor the CPU swaps the instructions: the generated code is "mov [x],1 / mov eax,[y]",
-// executed in that order. What is delayed is the moment the store becomes VISIBLE to the other
-// core, because it first waits in that core's store buffer.
+// Neither the JIT nor the CPU swaps the instructions. Thread 1's loop body in C#, IL and optimized
+// x64 (DOTNET_JitDisasm; addresses replaced by names, "dword ptr" omitted, registers normalized):
+//
+//   C#                                 IL                                x64 (Tier1)
+//   ---------------------------------  --------------------------------  ------------------------
+//   [plain fields]
+//   _x = 1;                            ldc.i4.1                          mov  [_x], 1
+//                                      stsfld   int32 _x
+//   _r1 = _y;                          ldsfld   int32 _y                 mov  ecx, [_y]
+//                                      stsfld   int32 _r1                mov  [_r1], ecx
+//
+//   [Volatile.Write / Volatile.Read]
+//   Volatile.Write(ref _x, 1);         ldsflda  int32 _x                 mov  [_x], 1
+//                                      ldc.i4.1
+//                                      call     Volatile::Write
+//   _r1 = Volatile.Read(ref _y);       ldsflda  int32 _y                 mov  ecx, [_y]
+//                                      call     Volatile::Read
+//                                      stsfld   int32 _r1                mov  [_r1], ecx
+//
+//   [Interlocked.MemoryBarrier()]
+//   _x = 1;                            ldc.i4.1                          mov  [_x], 1
+//                                      stsfld   int32 _x
+//   Interlocked.MemoryBarrier();       call  Interlocked::MemoryBarrier  lock or [rsp], 0
+//   _r1 = _y;                          ldsfld   int32 _y                 mov  ecx, [_y]
+//                                      stsfld   int32 _r1                mov  [_r1], ecx
+//
+// - The store comes before the load at every level, in every variant.
+// - Volatile changes the IL (a call instead of a field access) but not the x64 code.
+// - The fence is the only variant that adds an instruction.
+//
+// What is delayed is the moment the store becomes VISIBLE to the other core, because it first
+// waits in that core's store buffer.
 //
 // Hardware view (start: cache x=0, y=0)
 //
@@ -117,9 +186,10 @@
 // Fixes:
 //   - Interlocked.MemoryBarrier() between store and load: the core waits until its store buffer
 //     has drained before loading. Whichever load runs last then sees both stores, so _bothZero
-//     stays 0.
+//     stays 0. On x64 this is the "lock or" in the table above.
 //   - volatile / Volatile.Read / Volatile.Write: NO effect. On x64 they emit exactly the same
-//     instructions, and acquire/release allows store -> load reordering anyway (see theory, 4).
+//     instructions (see the table), and acquire/release allows store -> load reordering anyway
+//     (see theory, 4).
 // ---------------------------------------------------------------------------------------------
 internal static class StoreBufferingDemo
 {
@@ -185,6 +255,35 @@ internal static class StoreBufferingDemo
 // The write from the main thread reaches the coherent cache normally, but the loop never reads
 // memory again. Fix: Volatile.Read(ref _stop) or a volatile field. This forces the JIT to emit a
 // real load on every iteration (see theory, 4).
+//
+// The spinner thread in C#, IL and optimized x64 (same conventions as StoreBufferingDemo):
+//
+//   C#                                 IL                                x64 (Tier1)
+//   ---------------------------------  --------------------------------  ------------------------
+//   [plain field]
+//   long n = 0;                        ldc.i4.0 / conv.i8 / stloc.0      (n removed)
+//                                      br.s     COND
+//   while (!_stop)                     COND: ldsfld bool _stop           movzx eax, byte [_stop]
+//                                            brfalse.s LOOP              test  eax, eax
+//                                                                        jne   EXIT
+//   { n++; }                           LOOP: ldloc.0 / ... / stloc.0     SPIN: jmp SPIN
+//
+//   [Volatile.Read]
+//   long n = 0;                        ldc.i4.0 / conv.i8 / stloc.0      (n removed)
+//                                      br.s     COND
+//   while (!Volatile.Read(ref _stop))  COND: ldsflda bool _stop          cmp   byte [_stop], 0
+//                                            call  Volatile::Read        jne   EXIT
+//                                            brfalse.s LOOP
+//   { n++; }                           LOOP: ldloc.0 / ... / stloc.0     SPIN: cmp byte [_stop], 0
+//                                                                              je  SPIN
+//
+// - In IL, both variants load _stop on every iteration (COND runs after each LOOP).
+// - Plain: the JIT reads _stop once before the loop; SPIN jumps to itself with no load. n is
+//   removed because nothing reads it.
+// - Volatile.Read: SPIN reloads _stop on every iteration. It is still a plain cmp, no fence.
+// - A volatile field gives the same x64 as Volatile.Read; only the IL differs (theory, 4).
+// - The first (Tier0) code is unoptimized and does reload _stop. The loop is then moved to
+//   optimized code (OSR) while it runs, and from that point it never sees the write.
 // ---------------------------------------------------------------------------------------------
 internal static class LoopHoistingDemo
 {
